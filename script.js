@@ -1,6 +1,7 @@
-/* =========================================================
-   DRINKLY APPLICATION
-   ========================================================= */
+/* =====================================================
+   DRINKLY
+   Marketplace Drink Application
+   ===================================================== */
 
 
 /* ================= API ================= */
@@ -17,20 +18,15 @@ let selectedDrinks = [];
 
 let allDrinks = [];
 
-let currentFilter = "all";
+let currentCategory = "all";
 
 const cache = new Map();
 
-const usedCollectionDrinks =
+const usedCollectionIds =
     new Set();
 
 
 /* ================= ELEMENTS ================= */
-
-const container =
-    document.getElementById(
-        "drinksContainer"
-    );
 
 const searchInput =
     document.getElementById(
@@ -42,9 +38,9 @@ const searchBtn =
         "searchBtn"
     );
 
-const clearSearch =
+const drinksContainer =
     document.getElementById(
-        "clearSearch"
+        "drinksContainer"
     );
 
 const resultText =
@@ -52,7 +48,17 @@ const resultText =
         "resultText"
     );
 
-const selectedList =
+const filterName =
+    document.getElementById(
+        "filterName"
+    );
+
+const resetFilter =
+    document.getElementById(
+        "resetFilter"
+    );
+
+const selectedDrinksList =
     document.getElementById(
         "selectedDrinks"
     );
@@ -97,13 +103,8 @@ const toast =
         "toast"
     );
 
-const backTop =
-    document.getElementById(
-        "backTop"
-    );
 
-
-/* ================= INIT ================= */
+/* ================= INITIALIZE ================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -115,153 +116,18 @@ async function initialize() {
 
     await loadDefaultDrinks();
 
-    await buildCollections();
+    await loadCollections();
 
     updateGroup();
 
 }
 
 
-/* ================= SEARCH ================= */
+/* =====================================================
+   API
+   ===================================================== */
 
-searchBtn.addEventListener(
-    "click",
-    searchDrinks
-);
-
-
-searchInput.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            searchDrinks();
-
-        }
-
-    }
-);
-
-
-clearSearch.addEventListener(
-    "click",
-    function () {
-
-        searchInput.value = "";
-
-        currentFilter = "all";
-
-        setActiveFilter(
-            "all"
-        );
-
-        loadDefaultDrinks();
-
-    }
-);
-
-
-/* ================= FILTER ================= */
-
-document
-    .querySelectorAll(
-        ".filter"
-    )
-    .forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    currentFilter =
-                        button.dataset.filter;
-
-                    setActiveFilter(
-                        currentFilter
-                    );
-
-                    renderDrinks();
-
-                }
-            );
-
-        }
-    );
-
-
-function setActiveFilter(
-    filter
-) {
-
-    document
-        .querySelectorAll(
-            ".filter"
-        )
-        .forEach(
-            function (button) {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.filter ===
-                    filter
-                );
-
-            }
-        );
-
-}
-
-
-/* ================= SEE MORE ================= */
-
-document
-    .querySelectorAll(
-        ".see-more"
-    )
-    .forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const grid =
-                        document.getElementById(
-                            button.dataset.target
-                        );
-
-
-                    const expanded =
-                        grid.classList.toggle(
-                            "expanded"
-                        );
-
-
-                    button.classList.toggle(
-                        "open",
-                        expanded
-                    );
-
-
-                    button.innerHTML =
-                        expanded
-                            ? "Show Less <span>−</span>"
-                            : "See More <span>+</span>";
-
-                }
-            );
-
-        }
-    );
-
-
-/* ================= API FUNCTION ================= */
-
-async function getData(
+async function apiRequest(
     endpoint
 ) {
 
@@ -282,9 +148,7 @@ async function getData(
         );
 
 
-    if (
-        !response.ok
-    ) {
+    if (!response.ok) {
 
         throw new Error(
             "API request failed"
@@ -308,7 +172,9 @@ async function getData(
 }
 
 
-/* ================= DEFAULT 10 ================= */
+/* =====================================================
+   DEFAULT 10 DRINKS
+   ===================================================== */
 
 async function loadDefaultDrinks() {
 
@@ -317,18 +183,13 @@ async function loadDefaultDrinks() {
 
     try {
 
-        /*
-         * Assignment requirement:
-         * Initial page must show 10 drinks.
-         */
-
         const data =
-            await getData(
+            await apiRequest(
                 "search.php?f=a"
             );
 
 
-        allDrinks =
+        const basicDrinks =
             uniqueDrinks(
                 data.drinks || []
             ).slice(
@@ -337,11 +198,25 @@ async function loadDefaultDrinks() {
             );
 
 
-        currentFilter =
+        /*
+         * search.php provides the main
+         * drink information. We enrich
+         * each drink with details so the
+         * cards can show instructions
+         * and proper category.
+         */
+
+        allDrinks =
+            await enrichDrinks(
+                basicDrinks
+            );
+
+
+        currentCategory =
             "all";
 
 
-        setActiveFilter(
+        setCategoryUI(
             "all"
         );
 
@@ -350,17 +225,14 @@ async function loadDefaultDrinks() {
             `Showing ${allDrinks.length} drinks`;
 
 
-        renderDrinks();
-
+        renderProducts();
 
     } catch (error) {
 
-        showError(
-            "Unable to load drinks. Please try again."
-        );
+        console.error(error);
 
-        console.error(
-            error
+        showError(
+            "Unable to load drinks. Please check your internet connection."
         );
 
     }
@@ -368,7 +240,31 @@ async function loadDefaultDrinks() {
 }
 
 
-/* ================= SEARCH DRINKS ================= */
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+searchBtn.addEventListener(
+    "click",
+    searchDrinks
+);
+
+
+searchInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            searchDrinks();
+
+        }
+
+    }
+);
+
 
 async function searchDrinks() {
 
@@ -378,7 +274,7 @@ async function searchDrinks() {
 
     if (!query) {
 
-        loadDefaultDrinks();
+        await loadDefaultDrinks();
 
         return;
 
@@ -391,7 +287,7 @@ async function searchDrinks() {
     try {
 
         const data =
-            await getData(
+            await apiRequest(
                 "search.php?s=" +
                 encodeURIComponent(
                     query
@@ -399,30 +295,21 @@ async function searchDrinks() {
             );
 
 
-        allDrinks =
+        const basicDrinks =
             uniqueDrinks(
                 data.drinks || []
             );
 
 
-        currentFilter =
-            "all";
-
-
-        setActiveFilter(
-            "all"
-        );
-
-
         if (
-            allDrinks.length === 0
+            basicDrinks.length === 0
         ) {
 
             resultText.textContent =
                 "0 results";
 
 
-            container.innerHTML = `
+            drinksContainer.innerHTML = `
 
                 <div class="not-found">
 
@@ -430,9 +317,10 @@ async function searchDrinks() {
                         No drinks found
                     </h2>
 
-                    <p style="margin-top:8px">
+                    <p style="margin-top:7px">
 
-                        No drink matched
+                        We couldn't find a drink
+                        matching
                         "${escapeHtml(query)}".
 
                     </p>
@@ -446,6 +334,21 @@ async function searchDrinks() {
         }
 
 
+        allDrinks =
+            await enrichDrinks(
+                basicDrinks
+            );
+
+
+        currentCategory =
+            "all";
+
+
+        setCategoryUI(
+            "all"
+        );
+
+
         resultText.textContent =
             `Found ${allDrinks.length} result${
                 allDrinks.length === 1
@@ -454,7 +357,7 @@ async function searchDrinks() {
             }`;
 
 
-        renderDrinks();
+        renderProducts();
 
 
         document
@@ -468,12 +371,10 @@ async function searchDrinks() {
 
     } catch (error) {
 
+        console.error(error);
+
         showError(
             "Search failed. Please try again."
-        );
-
-        console.error(
-            error
         );
 
     }
@@ -481,50 +382,329 @@ async function searchDrinks() {
 }
 
 
-/* ================= RENDER DRINKS ================= */
+/* =====================================================
+   CATEGORY NAV
+   ===================================================== */
 
-function renderDrinks() {
+document
+    .querySelectorAll(
+        ".category-item"
+    )
+    .forEach(
+        function (button) {
 
-    let drinks =
-        allDrinks;
+            button.addEventListener(
+                "click",
+                function () {
 
-
-    if (
-        currentFilter !== "all"
-    ) {
-
-        drinks =
-            allDrinks.filter(
-                function (drink) {
-
-                    return (
-                        drink.strAlcoholic ===
-                        currentFilter
+                    loadCategory(
+                        button.dataset.category
                     );
 
                 }
             );
 
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        ".browse-card"
+    )
+    .forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    loadCategory(
+                        button.dataset.category
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+resetFilter.addEventListener(
+    "click",
+    function () {
+
+        searchInput.value = "";
+
+        loadDefaultDrinks();
+
+    }
+);
+
+
+async function loadCategory(
+    category
+) {
+
+    if (
+        category === "all"
+    ) {
+
+        await loadDefaultDrinks();
+
+        return;
+
     }
 
 
+    showLoading();
+
+
+    try {
+
+        let data;
+
+
+        if (
+            category ===
+            "Non_Alcoholic"
+        ) {
+
+            data =
+                await apiRequest(
+                    "filter.php?a=Non_Alcoholic"
+                );
+
+        } else {
+
+            data =
+                await apiRequest(
+                    "filter.php?c=" +
+                    encodeURIComponent(
+                        category
+                    )
+                );
+
+        }
+
+
+        const basicDrinks =
+            uniqueDrinks(
+                data.drinks || []
+            );
+
+
+        if (
+            basicDrinks.length === 0
+        ) {
+
+            drinksContainer.innerHTML = `
+
+                <div class="not-found">
+
+                    <h2>
+                        No drinks available
+                    </h2>
+
+                    <p style="margin-top:7px">
+                        Try another category.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Enrich category results with
+         * lookup endpoint so the card
+         * receives full information.
+         */
+
+        allDrinks =
+            await enrichDrinks(
+                basicDrinks
+            );
+
+
+        currentCategory =
+            category;
+
+
+        setCategoryUI(
+            category
+        );
+
+
+        resultText.textContent =
+            `${allDrinks.length} drinks`;
+
+
+        renderProducts();
+
+
+        document
+            .getElementById(
+                "drinks"
+            )
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            "Unable to load this category."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ENRICH DRINK DATA
+   ===================================================== */
+
+async function enrichDrinks(
+    drinks
+) {
+
+    /*
+     * Limit concurrent requests so
+     * the API isn't unnecessarily flooded.
+     */
+
+    const limited =
+        drinks.slice(
+            0,
+            30
+        );
+
+
+    const details =
+        await Promise.all(
+            limited.map(
+                async function (drink) {
+
+                    try {
+
+                        const data =
+                            await apiRequest(
+                                "lookup.php?i=" +
+                                drink.idDrink
+                            );
+
+
+                        return (
+                            data.drinks &&
+                            data.drinks[0]
+                        ) || drink;
+
+                    } catch {
+
+                        return drink;
+
+                    }
+
+                }
+            )
+        );
+
+
+    return uniqueDrinks(
+        details
+    );
+
+}
+
+
+/* =====================================================
+   CATEGORY UI
+   ===================================================== */
+
+function setCategoryUI(
+    category
+) {
+
+    document
+        .querySelectorAll(
+            ".category-item"
+        )
+        .forEach(
+            function (button) {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.category ===
+                    category
+                );
+
+            }
+        );
+
+
+    const names = {
+
+        all:
+            "All Drinks",
+
+        Cocktail:
+            "Cocktails",
+
+        "Ordinary Drink":
+            "Classic Drinks",
+
+        "Punch / Party Drink":
+            "Party Drinks",
+
+        Shake:
+            "Shakes",
+
+        "Coffee / Tea":
+            "Coffee & Tea",
+
+        Non_Alcoholic:
+            "Non-Alcoholic"
+
+    };
+
+
+    filterName.textContent =
+        names[category] ||
+        "Drinks";
+
+}
+
+
+/* =====================================================
+   PRODUCT RENDER
+   ===================================================== */
+
+function renderProducts() {
+
+    drinksContainer.innerHTML =
+        "";
+
+
     if (
-        drinks.length === 0
+        allDrinks.length === 0
     ) {
 
-        container.innerHTML = `
+        drinksContainer.innerHTML = `
 
             <div class="not-found">
 
                 <h2>
-                    Nothing here yet
+                    No drinks found
                 </h2>
-
-                <p style="margin-top:8px">
-
-                    Try another filter.
-
-                </p>
 
             </div>
 
@@ -535,15 +715,11 @@ function renderDrinks() {
     }
 
 
-    container.innerHTML =
-        "";
-
-
-    drinks.forEach(
+    allDrinks.forEach(
         function (drink) {
 
-            container.appendChild(
-                createDrinkCard(
+            drinksContainer.appendChild(
+                createProductCard(
                     drink
                 )
             );
@@ -554,9 +730,11 @@ function renderDrinks() {
 }
 
 
-/* ================= CARD ================= */
+/* =====================================================
+   PRODUCT CARD
+   ===================================================== */
 
-function createDrinkCard(
+function createProductCard(
     drink
 ) {
 
@@ -567,100 +745,128 @@ function createDrinkCard(
 
 
     card.className =
-        "drink-card";
+        "product-card";
 
 
-    const isNonAlcoholic =
-        drink.strAlcoholic ===
-        "Non_Alcoholic";
+    const name =
+        drink.strDrink ||
+        "Drink";
 
 
-    const instructions =
-        truncate(
-            drink.strInstructions ||
-            "No instructions available",
-            15
+    /*
+     * Never display "Other / Unknown".
+     * Use a meaningful fallback.
+     */
+
+    const category =
+        drink.strCategory ||
+        (
+            currentCategory !== "all"
+                ? getCategoryLabel(
+                    currentCategory
+                )
+                : "Featured Drink"
         );
+
+
+    const instruction =
+        drink.strInstructions ||
+        "Discover this drink.";
+
+
+    const alreadyAdded =
+        selectedDrinks.includes(
+            name
+        );
+
+
+    const alcoholic =
+        drink.strAlcoholic ===
+        "Non_Alcoholic"
+            ? "NON-ALCOHOLIC"
+            : "ALCOHOLIC";
 
 
     card.innerHTML = `
 
-        <div class="drink-image">
+        <div class="product-image">
 
             <img
                 src="${safeUrl(
                     drink.strDrinkThumb
                 )}"
                 alt="${escapeHtml(
-                    drink.strDrink
+                    name
                 )}"
                 loading="lazy"
             >
 
-            <span class="type-badge">
+            <span class="product-badge">
 
-                ${
-                    isNonAlcoholic
-                        ? "NON-ALCOHOLIC"
-                        : "ALCOHOLIC"
-                }
+                ${alcoholic}
 
             </span>
 
         </div>
 
 
-        <div class="drink-content">
+        <div class="product-body">
 
             <h3>
 
-                ${escapeHtml(
-                    drink.strDrink
-                )}
+                ${escapeHtml(name)}
 
             </h3>
 
 
-            <span class="category">
+            <span class="product-category">
 
-                ${escapeHtml(
-                    drink.strCategory ||
-                    "Unknown"
-                )}
+                ${escapeHtml(category)}
 
             </span>
 
 
             <p
-                class="instructions"
+                class="product-instruction"
                 title="${escapeHtml(
-                    drink.strInstructions ||
-                    ""
+                    instruction
                 )}"
             >
 
                 ${escapeHtml(
-                    instructions
+                    truncate(
+                        instruction,
+                        15
+                    )
                 )}
 
             </p>
 
 
-            <div class="card-actions">
+            <div class="product-actions">
 
                 <button
-                    class="card-button add-button"
+                    class="add-btn"
                     type="button"
+                    ${alreadyAdded ? "disabled" : ""}
                 >
-                    Add to Group
+
+                    ${
+                        alreadyAdded
+                            ? "Added"
+                            : "Add to Group"
+                    }
+
                 </button>
 
 
                 <button
-                    class="card-button details-button"
+                    class="details-btn"
                     type="button"
                 >
+
                     Details
+
                 </button>
 
             </div>
@@ -670,42 +876,25 @@ function createDrinkCard(
     `;
 
 
-    const addButton =
-        card.querySelector(
-            ".add-button"
-        );
-
-
-    if (
-        selectedDrinks.includes(
-            drink.strDrink
+    card
+        .querySelector(
+            ".add-btn"
         )
-    ) {
+        .addEventListener(
+            "click",
+            function () {
 
-        addButton.textContent =
-            "Added";
+                addToGroup(
+                    name
+                );
 
-        addButton.disabled =
-            true;
-
-    }
-
-
-    addButton.addEventListener(
-        "click",
-        function () {
-
-            addToGroup(
-                drink.strDrink
-            );
-
-        }
-    );
+            }
+        );
 
 
     card
         .querySelector(
-            ".details-button"
+            ".details-btn"
         )
         .addEventListener(
             "click",
@@ -724,14 +913,16 @@ function createDrinkCard(
 }
 
 
-/* ================= ADD TO GROUP ================= */
+/* =====================================================
+   GROUP
+   ===================================================== */
 
 function addToGroup(
     name
 ) {
 
     /*
-     * Assignment requirement:
+     * Mandatory assignment requirement:
      * Maximum 7.
      */
 
@@ -771,8 +962,7 @@ function addToGroup(
 
     updateGroup();
 
-
-    renderDrinks();
+    renderProducts();
 
 
     showToast(
@@ -781,8 +971,6 @@ function addToGroup(
 
 }
 
-
-/* ================= UPDATE GROUP ================= */
 
 function updateGroup() {
 
@@ -814,12 +1002,11 @@ function updateGroup() {
         count === 0
     ) {
 
-        selectedList.innerHTML = `
+        selectedDrinksList.innerHTML = `
 
             <li class="empty">
 
-                Your selected drinks
-                will appear here.
+                No drinks selected yet.
 
             </li>
 
@@ -830,7 +1017,7 @@ function updateGroup() {
     }
 
 
-    selectedList.innerHTML =
+    selectedDrinksList.innerHTML =
         "";
 
 
@@ -861,7 +1048,9 @@ function updateGroup() {
                     type="button"
                     aria-label="Remove drink"
                 >
+
                     ×
+
                 </button>
 
             `;
@@ -883,8 +1072,7 @@ function updateGroup() {
 
                         updateGroup();
 
-
-                        renderDrinks();
+                        renderProducts();
 
 
                         showToast(
@@ -895,7 +1083,7 @@ function updateGroup() {
                 );
 
 
-            selectedList.appendChild(
+            selectedDrinksList.appendChild(
                 item
             );
 
@@ -905,7 +1093,280 @@ function updateGroup() {
 }
 
 
-/* ================= DETAILS ================= */
+/* =====================================================
+   COLLECTIONS
+   ===================================================== */
+
+async function loadCollections() {
+
+    usedCollectionIds.clear();
+
+
+    const collectionMap = [
+
+        {
+            element:
+                "cocktailCollection",
+
+            category:
+                "Cocktail"
+        },
+
+        {
+            element:
+                "classicCollection",
+
+            category:
+                "Ordinary Drink"
+        },
+
+        {
+            element:
+                "partyCollection",
+
+            category:
+                "Punch / Party Drink"
+        },
+
+        {
+            element:
+                "zeroCollection",
+
+            category:
+                "Non_Alcoholic"
+        }
+
+    ];
+
+
+    /*
+     * Sequential loading is intentional.
+     * It lets the global ID Set prevent
+     * duplicate drinks between sections.
+     */
+
+    for (
+        const collection
+        of collectionMap
+    ) {
+
+        try {
+
+            let data;
+
+
+            if (
+                collection.category ===
+                "Non_Alcoholic"
+            ) {
+
+                data =
+                    await apiRequest(
+                        "filter.php?a=Non_Alcoholic"
+                    );
+
+            } else {
+
+                data =
+                    await apiRequest(
+                        "filter.php?c=" +
+                        encodeURIComponent(
+                            collection.category
+                        )
+                    );
+
+            }
+
+
+            renderCollection(
+                collection.element,
+                data.drinks || []
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   COLLECTION RENDER
+   ===================================================== */
+
+function renderCollection(
+    elementId,
+    drinks
+) {
+
+    const grid =
+        document.getElementById(
+            elementId
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    let count =
+        0;
+
+
+    for (
+        const drink
+        of uniqueDrinks(drinks)
+    ) {
+
+        /*
+         * Global deduplication.
+         */
+
+        if (
+            usedCollectionIds.has(
+                drink.idDrink
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        usedCollectionIds.add(
+            drink.idDrink
+        );
+
+
+        const card =
+            document.createElement(
+                "article"
+            );
+
+
+        card.className =
+            "collection-card";
+
+
+        card.innerHTML = `
+
+            <img
+                src="${safeUrl(
+                    drink.strDrinkThumb
+                )}"
+                alt="${escapeHtml(
+                    drink.strDrink
+                )}"
+                loading="lazy"
+            >
+
+
+            <div class="collection-card-info">
+
+                <strong>
+
+                    ${escapeHtml(
+                        drink.strDrink
+                    )}
+
+                </strong>
+
+
+                <span>
+                    Discover drink
+                </span>
+
+            </div>
+
+        `;
+
+
+        card.addEventListener(
+            "click",
+            function () {
+
+                showDetails(
+                    drink.idDrink
+                );
+
+            }
+        );
+
+
+        card.style.cursor =
+            "pointer";
+
+
+        grid.appendChild(
+            card
+        );
+
+
+        count++;
+
+
+        if (
+            count >= 10
+        ) {
+
+            break;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   SEE MORE
+   ===================================================== */
+
+document
+    .querySelectorAll(
+        ".see-more"
+    )
+    .forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const grid =
+                        document.getElementById(
+                            button.dataset.target
+                        );
+
+
+                    const expanded =
+                        grid.classList.toggle(
+                            "expanded"
+                        );
+
+
+                    button.innerHTML =
+                        expanded
+                            ? "Show Less ↑"
+                            : "See More →";
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   DETAILS MODAL
+   ===================================================== */
 
 async function showDetails(
     id
@@ -926,9 +1387,7 @@ async function showDetails(
 
             <div class="spinner"></div>
 
-            <p>
-                Loading details...
-            </p>
+            Loading details...
 
         </div>
 
@@ -938,7 +1397,7 @@ async function showDetails(
     try {
 
         const data =
-            await getData(
+            await apiRequest(
                 "lookup.php?i=" +
                 encodeURIComponent(
                     id
@@ -954,7 +1413,7 @@ async function showDetails(
         if (!drink) {
 
             throw new Error(
-                "Drink unavailable"
+                "Drink not found"
             );
 
         }
@@ -1014,7 +1473,7 @@ async function showDetails(
         modalBody.innerHTML = `
 
             <img
-                class="modal-img"
+                class="modal-image"
                 src="${safeUrl(
                     drink.strDrinkThumb
                 )}"
@@ -1033,9 +1492,9 @@ async function showDetails(
             </h2>
 
 
-            <div class="info-grid">
+            <div class="modal-info">
 
-                <div class="info">
+                <div>
 
                     <strong>
                         Category
@@ -1043,13 +1502,13 @@ async function showDetails(
 
                     ${escapeHtml(
                         drink.strCategory ||
-                        "N/A"
+                        "Drink"
                     )}
 
                 </div>
 
 
-                <div class="info">
+                <div>
 
                     <strong>
                         Type
@@ -1063,7 +1522,7 @@ async function showDetails(
                 </div>
 
 
-                <div class="info">
+                <div>
 
                     <strong>
                         Glass
@@ -1077,7 +1536,7 @@ async function showDetails(
                 </div>
 
 
-                <div class="info">
+                <div>
 
                     <strong>
                         IBA
@@ -1128,6 +1587,8 @@ async function showDetails(
 
     } catch (error) {
 
+        console.error(error);
+
         modalBody.innerHTML = `
 
             <div class="not-found">
@@ -1136,10 +1597,8 @@ async function showDetails(
                     Details unavailable
                 </h2>
 
-                <p style="margin-top:8px">
-
+                <p style="margin-top:7px">
                     Unable to load drink details.
-
                 </p>
 
             </div>
@@ -1151,7 +1610,9 @@ async function showDetails(
 }
 
 
-/* ================= CLOSE MODAL ================= */
+/* =====================================================
+   CLOSE MODAL
+   ===================================================== */
 
 closeModalBtn.addEventListener(
     "click",
@@ -1204,306 +1665,9 @@ function closeModal() {
 }
 
 
-/* ================= COLLECTION BUILDER ================= */
-
-async function buildCollections() {
-
-    /*
-     * Different API categories/letters are collected.
-     * Every drink gets checked against one global Set,
-     * so the same drink is not intentionally reused.
-     */
-
-    try {
-
-        const [
-            classics,
-            tropical,
-            refreshing,
-            zeroProof,
-            warm
-        ] = await Promise.all([
-
-            getCategoryDrinks(
-                "Cocktail"
-            ),
-
-            getCategoryDrinks(
-                "Punch / Party Drink"
-            ),
-
-            getCategoryDrinks(
-                "Ordinary Drink"
-            ),
-
-            getNonAlcoholicDrinks(),
-
-            getWarmDrinks()
-
-        ]);
-
-
-        renderUniqueCollection(
-            "classicGrid",
-            classics
-        );
-
-
-        renderUniqueCollection(
-            "tropicalGrid",
-            tropical
-        );
-
-
-        renderUniqueCollection(
-            "freshGrid",
-            refreshing
-        );
-
-
-        renderUniqueCollection(
-            "zeroGrid",
-            zeroProof
-        );
-
-
-        renderUniqueCollection(
-            "warmGrid",
-            warm
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-    }
-
-}
-
-
-/* ================= CATEGORY API ================= */
-
-async function getCategoryDrinks(
-    category
-) {
-
-    try {
-
-        const data =
-            await getData(
-                "filter.php?c=" +
-                encodeURIComponent(
-                    category
-                )
-            );
-
-
-        return data.drinks || [];
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-/* ================= NON ALCOHOLIC ================= */
-
-async function getNonAlcoholicDrinks() {
-
-    try {
-
-        const data =
-            await getData(
-                "filter.php?a=Non_Alcoholic"
-            );
-
-
-        return data.drinks || [];
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-/* ================= WARM DRINKS ================= */
-
-async function getWarmDrinks() {
-
-    try {
-
-        const coffee =
-            await getData(
-                "filter.php?c=Coffee / Tea"
-            );
-
-
-        const cocoa =
-            await getData(
-                "search.php?s=chocolate"
-            );
-
-
-        return uniqueDrinks(
-            [
-                ...(coffee.drinks || []),
-                ...(cocoa.drinks || [])
-            ]
-        );
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-/* ================= UNIQUE COLLECTION ================= */
-
-function renderUniqueCollection(
-    elementId,
-    drinks
-) {
-
-    const grid =
-        document.getElementById(
-            elementId
-        );
-
-
-    grid.innerHTML =
-        "";
-
-
-    const unique =
-        [];
-
-
-    for (
-        const drink of drinks
-    ) {
-
-        if (
-            usedCollectionDrinks.has(
-                drink.idDrink
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        usedCollectionDrinks.add(
-            drink.idDrink
-        );
-
-
-        unique.push(
-            drink
-        );
-
-
-        if (
-            unique.length >= 10
-        ) {
-
-            break;
-
-        }
-
-    }
-
-
-    unique.forEach(
-        function (drink) {
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "collection-card";
-
-
-            card.innerHTML = `
-
-                <img
-                    src="${safeUrl(
-                        drink.strDrinkThumb
-                    )}"
-                    alt="${escapeHtml(
-                        drink.strDrink
-                    )}"
-                    loading="lazy"
-                >
-
-
-                <div class="collection-info">
-
-                    <strong>
-
-                        ${escapeHtml(
-                            drink.strDrink
-                        )}
-
-                    </strong>
-
-
-                    <span>
-
-                        ${escapeHtml(
-                            drink.strCategory ||
-                            "Drink"
-                        )}
-
-                    </span>
-
-                </div>
-
-            `;
-
-
-            card.addEventListener(
-                "click",
-                function () {
-
-                    showDetails(
-                        drink.idDrink
-                    );
-
-                }
-            );
-
-
-            card.style.cursor =
-                "pointer";
-
-
-            grid.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-/* ================= UNIQUE DRINKS ================= */
+/* =====================================================
+   HELPERS
+   ===================================================== */
 
 function uniqueDrinks(
     drinks
@@ -1542,19 +1706,127 @@ function uniqueDrinks(
 }
 
 
-/* ================= LOADING ================= */
+function getCategoryLabel(
+    category
+) {
+
+    const labels = {
+
+        Cocktail:
+            "Cocktails",
+
+        "Ordinary Drink":
+            "Classic Drink",
+
+        "Punch / Party Drink":
+            "Party Drink",
+
+        Shake:
+            "Shake",
+
+        "Coffee / Tea":
+            "Coffee & Tea",
+
+        Non_Alcoholic:
+            "Non-Alcoholic"
+
+    };
+
+
+    return (
+        labels[category] ||
+        "Featured Drink"
+    );
+
+}
+
+
+function truncate(
+    text,
+    max
+) {
+
+    if (
+        text.length <= max
+    ) {
+
+        return text;
+
+    }
+
+
+    return (
+        text.slice(
+            0,
+            max
+        ) +
+        "..."
+    );
+
+}
+
+
+function safeUrl(
+    url
+) {
+
+    return /^https?:\/\//i.test(
+        url || ""
+    )
+        ? url
+        : "";
+
+}
+
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    ).replace(
+        /[&<>"']/g,
+        function (character) {
+
+            return {
+
+                "&":
+                    "&amp;",
+
+                "<":
+                    "&lt;",
+
+                ">":
+                    "&gt;",
+
+                '"':
+                    "&quot;",
+
+                "'":
+                    "&#039;"
+
+            }[character];
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOADING / ERROR
+   ===================================================== */
 
 function showLoading() {
 
-    container.innerHTML = `
+    drinksContainer.innerHTML = `
 
         <div class="loading">
 
             <div class="spinner"></div>
 
-            <p>
-                Loading drinks...
-            </p>
+            Loading drinks...
 
         </div>
 
@@ -1563,13 +1835,11 @@ function showLoading() {
 }
 
 
-/* ================= ERROR ================= */
-
 function showError(
     message
 ) {
 
-    container.innerHTML = `
+    drinksContainer.innerHTML = `
 
         <div class="not-found">
 
@@ -1577,9 +1847,11 @@ function showError(
                 Something went wrong
             </h2>
 
-            <p style="margin-top:8px">
+            <p style="margin-top:7px">
 
-                ${escapeHtml(message)}
+                ${escapeHtml(
+                    message
+                )}
 
             </p>
 
@@ -1590,7 +1862,9 @@ function showError(
 }
 
 
-/* ================= TOAST ================= */
+/* =====================================================
+   TOAST
+   ===================================================== */
 
 function showToast(
     message
@@ -1621,90 +1895,5 @@ function showToast(
             },
             2000
         );
-
-}
-
-
-/* ================= BACK TOP ================= */
-
-window.addEventListener(
-    "scroll",
-    function () {
-
-        backTop.classList.toggle(
-            "show",
-            window.scrollY > 450
-        );
-
-    }
-);
-
-
-backTop.addEventListener(
-    "click",
-    function () {
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }
-);
-
-
-/* ================= HELPERS ================= */
-
-function truncate(
-    text,
-    max
-) {
-
-    return text.length > max
-        ? text.slice(0, max) + "..."
-        : text;
-
-}
-
-
-function safeUrl(
-    url
-) {
-
-    return /^https?:\/\//i.test(
-        url || ""
-    )
-        ? url
-        : "";
-
-}
-
-
-function escapeHtml(
-    value
-) {
-
-    return String(
-        value ?? ""
-    ).replace(
-        /[&<>"']/g,
-        function (character) {
-
-            return {
-
-                "&": "&amp;",
-
-                "<": "&lt;",
-
-                ">": "&gt;",
-
-                '"': "&quot;",
-
-                "'": "&#039;"
-
-            }[character];
-
-        }
-    );
 
 }
