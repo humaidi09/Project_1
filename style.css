@@ -786,27 +786,13 @@ img {
 ===================================================== */
 
 .hero-drinks {
-
-  position:
-    absolute;
-
-  top:
-    0;
-
-  right:
-    -5px;
-
-  width:
-    500px;
-
-  height:
-    100%;
-
-  pointer-events:
-    none;
-
+  position: absolute;
+  top: 0;
+  right: -75px;
+  width: 430px;
+  height: 100%;
+  pointer-events: none;
 }
-
 
 .hero-circle {
 
@@ -3821,12 +3807,16 @@ img {
   }
 
 
-  .hero-inner {
-
-    min-height:
-      400px;
-
-  }
+.hero-inner {
+  width: min(1320px, calc(100% - 40px));
+  height: 310px;
+  min-height: 310px;
+  margin: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
 
 
   .hero-content {
@@ -3850,22 +3840,14 @@ img {
 
   }
 
-
-  .hero-drinks {
-
-    width:
-      430px;
-
-    right:
-      -145px;
-
-    top:
-      125px;
-
-    opacity:
-      .35;
-
-  }
+.hero-drinks {
+  position: absolute;
+  top: 0;
+  right: -75px;
+  width: 430px;
+  height: 100%;
+  pointer-events: none;
+}
 
 
   .product-grid {
