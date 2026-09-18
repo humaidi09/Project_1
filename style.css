@@ -170,11 +170,13 @@ a {
   overflow: hidden;
   display: flex;
   align-items: center;
+
   background:
     linear-gradient(90deg,
       rgba(25, 18, 15, .92),
       rgba(25, 18, 15, .35)),
     url("https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg");
+
   background-size: cover;
   background-position: center;
 }
@@ -489,7 +491,7 @@ a {
 /* PRICE */
 
 .price-area {
-  min-height: 52px;
+  min-height: 57px;
   margin: 5px 0 12px;
 }
 
@@ -497,7 +499,7 @@ a {
   color: #999;
   text-decoration: line-through;
   font-size: 10px;
-  margin-right: 6px;
+  margin-right: 7px;
 }
 
 .discount {
@@ -508,9 +510,9 @@ a {
 
 .final-price {
   display: block;
-  margin-top: 3px;
+  margin-top: 4px;
   color: var(--black);
-  font-size: 20px;
+  font-size: 21px;
   line-height: 1;
   font-weight: 800;
 }
@@ -944,7 +946,7 @@ footer {
   background: #191919;
   color: #fff;
   border-radius: 5px;
-  font-size: 10px;
+  font-size: 9px;
   opacity: 0;
   transform: translateY(10px);
   pointer-events: none;
@@ -959,7 +961,7 @@ footer {
 
 /* TABLET */
 
-@media(max-width:1000px) {
+@media (max-width:1000px) {
 
   .header-actions {
     display: none;
@@ -988,13 +990,12 @@ footer {
   .collection-row.expanded .collection-card:nth-child(n+4) {
     display: block;
   }
-
 }
 
 
 /* MOBILE */
 
-@media(max-width:650px) {
+@media (max-width:650px) {
 
   .header-inner {
     padding: 10px 13px;
@@ -1054,6 +1055,10 @@ footer {
 
   .collection-row.expanded .collection-card:nth-child(n+3) {
     display: block;
+  }
+
+  .collection-card img {
+    height: 125px;
   }
 
   .products-top {

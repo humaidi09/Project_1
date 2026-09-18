@@ -116,14 +116,12 @@ async function loadDefaultDrinks() {
     try {
 
         const data =
-            await apiRequest(
-                "search.php?f=a"
-            );
+            await apiRequest("search.php?f=a");
 
         const basicDrinks =
             uniqueDrinks(
                 data.drinks || []
-            ).slice(0, 10);
+            ).slice(0,10);
 
         allDrinks =
             await enrichDrinks(
@@ -139,12 +137,12 @@ async function loadDefaultDrinks() {
 
         renderProducts();
 
-    } catch (error) {
+    } catch(error) {
 
         console.error(error);
 
         showError(
-            "Unable to load drinks."
+            "Unable to load drinks. Please check your internet connection."
         );
 
     }
@@ -163,7 +161,7 @@ searchInput.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Enter") {
+        if(event.key === "Enter") {
             searchDrinks();
         }
 
@@ -176,8 +174,10 @@ async function searchDrinks() {
     const query =
         searchInput.value.trim();
 
-    if (!query) {
+    if(!query) {
+
         await loadDefaultDrinks();
+
         return;
     }
 
@@ -196,7 +196,7 @@ async function searchDrinks() {
                 data.drinks || []
             );
 
-        if (!basicDrinks.length) {
+        if(!basicDrinks.length) {
 
             resultText.textContent =
                 "0 results";
@@ -205,10 +205,13 @@ async function searchDrinks() {
 
                 <div class="not-found">
 
-                    <h2>No drinks found</h2>
+                    <h2>
+                        No drinks found
+                    </h2>
 
                     <p style="margin-top:7px">
-                        We couldn't find "${escapeHtml(query)}".
+                        We couldn't find
+                        "${escapeHtml(query)}".
                     </p>
 
                 </div>
@@ -240,16 +243,15 @@ async function searchDrinks() {
                 behavior:"smooth"
             });
 
-    } catch (error) {
+    } catch(error) {
 
         console.error(error);
 
         showError(
-            "Search failed."
+            "Search failed. Please try again."
         );
 
     }
-
 }
 
 
@@ -305,12 +307,11 @@ resetFilter.addEventListener(
 
 async function loadCategory(category) {
 
-    if (category === "all") {
+    if(category === "all") {
 
         await loadDefaultDrinks();
 
         return;
-
     }
 
     showLoading();
@@ -319,7 +320,7 @@ async function loadCategory(category) {
 
         let data;
 
-        if (category === "Non_Alcoholic") {
+        if(category === "Non_Alcoholic") {
 
             data =
                 await apiRequest(
@@ -341,7 +342,7 @@ async function loadCategory(category) {
                 data.drinks || []
             );
 
-        if (!basicDrinks.length) {
+        if(!basicDrinks.length) {
 
             drinksContainer.innerHTML = `
 
@@ -378,7 +379,7 @@ async function loadCategory(category) {
                 behavior:"smooth"
             });
 
-    } catch (error) {
+    } catch(error) {
 
         console.error(error);
 
@@ -387,7 +388,6 @@ async function loadCategory(category) {
         );
 
     }
-
 }
 
 
@@ -396,7 +396,7 @@ async function loadCategory(category) {
 async function enrichDrinks(drinks) {
 
     const limited =
-        drinks.slice(0, 30);
+        drinks.slice(0,30);
 
     const details =
         await Promise.all(
@@ -445,27 +445,31 @@ function setCategoryUI(category) {
 
         });
 
+
     const names = {
 
-        all:"All Drinks",
+        all: "All Drinks",
 
-        Cocktail:"Cocktails",
+        Cocktail: "Cocktails",
 
-        "Ordinary Drink":"Classic Drinks",
+        "Ordinary Drink":
+            "Classic Drinks",
 
-        "Punch / Party Drink":"Party Drinks",
+        "Punch / Party Drink":
+            "Party Drinks",
 
-        Shake:"Shakes",
+        Shake: "Shakes",
 
-        "Coffee / Tea":"Coffee & Tea",
+        "Coffee / Tea":
+            "Coffee & Tea",
 
-        Non_Alcoholic:"Non-Alcoholic"
+        Non_Alcoholic:
+            "Non-Alcoholic"
 
     };
 
     filterName.textContent =
         names[category] || "Drinks";
-
 }
 
 
@@ -480,18 +484,29 @@ function getPriceData(drink) {
         ) || 100;
 
 
+    /*
+       Every drink gets a consistent
+       marketplace price based on ID.
+    */
+
     const basePrice =
         500 + (id % 11) * 75;
 
+
+    /*
+       Discount between 10% and 25%.
+    */
 
     const discount =
         10 + (id % 4) * 5;
 
 
     const discountAmount =
-        basePrice *
-        discount /
-        100;
+        Math.round(
+            basePrice *
+            discount /
+            100
+        );
 
 
     const finalPrice =
@@ -506,21 +521,20 @@ function getPriceData(drink) {
 
         discount,
 
-        discountAmount:
-            Math.round(discountAmount),
+        discountAmount,
 
         finalPrice:
             Math.round(finalPrice)
 
     };
-
 }
 
 
 function formatPrice(price) {
 
     return "৳" +
-        price.toLocaleString("en-BD");
+        Number(price || 0)
+            .toLocaleString("en-BD");
 
 }
 
@@ -531,7 +545,7 @@ function renderProducts() {
 
     drinksContainer.innerHTML = "";
 
-    if (!allDrinks.length) {
+    if(!allDrinks.length) {
 
         drinksContainer.innerHTML = `
 
@@ -547,6 +561,7 @@ function renderProducts() {
 
         return;
     }
+
 
     allDrinks.forEach(
         function(drink) {
@@ -590,6 +605,11 @@ function createProductCard(drink) {
         "Discover this drink.";
 
 
+    /*
+       PRICE IS CREATED HERE
+       AND DISPLAYED ON EVERY CARD.
+    */
+
     const price =
         getPriceData(drink);
 
@@ -597,13 +617,17 @@ function createProductCard(drink) {
     const alreadyAdded =
         selectedDrinks.some(
             function(item) {
-                return item.id === drink.idDrink;
+
+                return item.id ===
+                    drink.idDrink;
+
             }
         );
 
 
     const alcoholic =
-        drink.strAlcoholic === "Non_Alcoholic"
+        drink.strAlcoholic ===
+        "Non_Alcoholic"
             ? "NON-ALCOHOLIC"
             : "ALCOHOLIC";
 
@@ -613,7 +637,9 @@ function createProductCard(drink) {
         <div class="product-image">
 
             <img
-                src="${safeUrl(drink.strDrinkThumb)}"
+                src="${safeUrl(
+                    drink.strDrinkThumb
+                )}"
                 alt="${escapeHtml(name)}"
                 loading="lazy"
             >
@@ -633,9 +659,7 @@ function createProductCard(drink) {
 
 
             <span class="product-category">
-
                 ${escapeHtml(category)}
-
             </span>
 
 
@@ -643,34 +667,31 @@ function createProductCard(drink) {
                 class="product-instruction"
                 title="${escapeHtml(instruction)}"
             >
-
                 ${escapeHtml(
-                    truncate(instruction,15)
+                    truncate(
+                        instruction,
+                        15
+                    )
                 )}
-
             </p>
 
 
             <div class="price-area">
 
                 <span class="old-price">
-
-                    ${formatPrice(price.basePrice)}
-
+                    ${formatPrice(
+                        price.basePrice
+                    )}
                 </span>
-
 
                 <span class="discount">
-
                     ${price.discount}% OFF
-
                 </span>
 
-
                 <strong class="final-price">
-
-                    ${formatPrice(price.finalPrice)}
-
+                    ${formatPrice(
+                        price.finalPrice
+                    )}
                 </strong>
 
             </div>
@@ -683,13 +704,11 @@ function createProductCard(drink) {
                     type="button"
                     ${alreadyAdded ? "disabled" : ""}
                 >
-
                     ${
                         alreadyAdded
                             ? "Added"
                             : "Add to Group"
                     }
-
                 </button>
 
 
@@ -697,9 +716,7 @@ function createProductCard(drink) {
                     class="details-btn"
                     type="button"
                 >
-
                     Details
-
                 </button>
 
             </div>
@@ -739,7 +756,6 @@ function createProductCard(drink) {
 
 
     return card;
-
 }
 
 
@@ -747,8 +763,9 @@ function createProductCard(drink) {
 
 function addToGroup(drink, price) {
 
-    if (
-        selectedDrinks.length >= MAX_GROUP
+    if(
+        selectedDrinks.length >=
+        MAX_GROUP
     ) {
 
         alert(
@@ -762,12 +779,15 @@ function addToGroup(drink, price) {
     const exists =
         selectedDrinks.some(
             function(item) {
-                return item.id === drink.idDrink;
+
+                return item.id ===
+                    drink.idDrink;
+
             }
         );
 
 
-    if (exists) {
+    if(exists) {
 
         alert(
             "This drink is already in your group!"
@@ -798,7 +818,6 @@ function addToGroup(drink, price) {
     showToast(
         "Drink added to your group."
     );
-
 }
 
 
@@ -813,8 +832,10 @@ function updateGroup() {
     drinkCount.textContent =
         count;
 
+
     currentCount.textContent =
         count;
+
 
     navCount.textContent =
         count;
@@ -828,17 +849,20 @@ function updateGroup() {
         ) + "%";
 
 
+    /*
+       Every add/remove triggers
+       a complete recalculation.
+    */
+
     calculateTotals();
 
 
-    if (!count) {
+    if(!count) {
 
         selectedDrinksList.innerHTML = `
 
             <li class="empty">
-
                 No drinks selected yet.
-
             </li>
 
         `;
@@ -884,9 +908,7 @@ function updateGroup() {
                     class="remove"
                     type="button"
                 >
-
                     ×
-
                 </button>
 
             `;
@@ -919,7 +941,6 @@ function updateGroup() {
 
         }
     );
-
 }
 
 
@@ -936,10 +957,14 @@ function calculateTotals() {
         function(item) {
 
             subtotal +=
-                item.price.basePrice;
+                Number(
+                    item.price.basePrice
+                );
 
             discount +=
-                item.price.discountAmount;
+                Number(
+                    item.price.discountAmount
+                );
 
         }
     );
@@ -950,23 +975,16 @@ function calculateTotals() {
 
 
     subtotalElement.textContent =
-        formatPrice(
-            subtotal
-        );
+        formatPrice(subtotal);
 
 
     totalDiscountElement.textContent =
         "-" +
-        formatPrice(
-            discount
-        );
+        formatPrice(discount);
 
 
     grandTotalElement.textContent =
-        formatPrice(
-            total
-        );
-
+        formatPrice(total);
 }
 
 
@@ -980,29 +998,41 @@ async function loadCollections() {
     const collectionMap = [
 
         {
-            element:"cocktailCollection",
-            category:"Cocktail"
+            element:
+                "cocktailCollection",
+
+            category:
+                "Cocktail"
         },
 
         {
-            element:"classicCollection",
-            category:"Ordinary Drink"
+            element:
+                "classicCollection",
+
+            category:
+                "Ordinary Drink"
         },
 
         {
-            element:"partyCollection",
-            category:"Punch / Party Drink"
+            element:
+                "partyCollection",
+
+            category:
+                "Punch / Party Drink"
         },
 
         {
-            element:"zeroCollection",
-            category:"Non_Alcoholic"
+            element:
+                "zeroCollection",
+
+            category:
+                "Non_Alcoholic"
         }
 
     ];
 
 
-    for (
+    for(
         const collection
         of collectionMap
     ) {
@@ -1012,7 +1042,7 @@ async function loadCollections() {
             let data;
 
 
-            if (
+            if(
                 collection.category ===
                 "Non_Alcoholic"
             ) {
@@ -1045,9 +1075,7 @@ async function loadCollections() {
             console.error(error);
 
         }
-
     }
-
 }
 
 
@@ -1066,21 +1094,19 @@ function renderCollection(
 
     grid.innerHTML = "";
 
-
     let count = 0;
 
 
-    for (
+    for(
         const drink
         of uniqueDrinks(drinks)
     ) {
 
-        if (
+        if(
             usedCollectionIds.has(
                 drink.idDrink
             )
         ) {
-
             continue;
         }
 
@@ -1141,18 +1167,21 @@ function renderCollection(
         );
 
 
+        card.style.cursor =
+            "pointer";
+
+
         grid.appendChild(card);
 
 
         count++;
 
 
-        if (count >= 10) {
+        if(count >= 10) {
             break;
         }
 
     }
-
 }
 
 
@@ -1160,33 +1189,35 @@ function renderCollection(
 
 document
     .querySelectorAll(".see-more")
-    .forEach(function(button) {
+    .forEach(
+        function(button) {
 
-        button.addEventListener(
-            "click",
-            function() {
+            button.addEventListener(
+                "click",
+                function() {
 
-                const grid =
-                    document.getElementById(
-                        button.dataset.target
-                    );
-
-
-                const expanded =
-                    grid.classList.toggle(
-                        "expanded"
-                    );
+                    const grid =
+                        document.getElementById(
+                            button.dataset.target
+                        );
 
 
-                button.textContent =
-                    expanded
-                        ? "Show Less ↑"
-                        : "See More →";
+                    const expanded =
+                        grid.classList.toggle(
+                            "expanded"
+                        );
 
-            }
-        );
 
-    });
+                    button.textContent =
+                        expanded
+                            ? "Show Less ↑"
+                            : "See More →";
+
+                }
+            );
+
+        }
+    );
 
 
 /* ================= DETAILS ================= */
@@ -1226,21 +1257,17 @@ async function showDetails(id) {
             data.drinks[0];
 
 
-        if (!drink) {
+        if(!drink) {
             throw new Error(
                 "Drink not found"
             );
         }
 
 
-        const price =
-            getPriceData(drink);
-
-
         const ingredients = [];
 
 
-        for (
+        for(
             let i = 1;
             i <= 15;
             i++
@@ -1258,7 +1285,7 @@ async function showDetails(id) {
                 ];
 
 
-            if (ingredient) {
+            if(ingredient) {
 
                 ingredients.push(`
 
@@ -1350,11 +1377,12 @@ async function showDetails(id) {
                 <div>
 
                     <strong>
-                        Price
+                        IBA
                     </strong>
 
-                    ${formatPrice(
-                        price.finalPrice
+                    ${escapeHtml(
+                        drink.strIBA ||
+                        "N/A"
                     )}
 
                 </div>
@@ -1368,12 +1396,10 @@ async function showDetails(id) {
 
 
             <p>
-
                 ${escapeHtml(
                     drink.strInstructions ||
                     "No instructions available."
                 )}
-
             </p>
 
 
@@ -1406,16 +1432,14 @@ async function showDetails(id) {
                     Details unavailable
                 </h2>
 
-                <p style="margin-top:7px">
+                <p>
                     Unable to load drink details.
                 </p>
 
             </div>
 
         `;
-
     }
-
 }
 
 
@@ -1431,7 +1455,7 @@ modal.addEventListener(
     "click",
     function(event) {
 
-        if (event.target === modal) {
+        if(event.target === modal) {
             closeModal();
         }
 
@@ -1443,7 +1467,7 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Escape") {
+        if(event.key === "Escape") {
             closeModal();
         }
 
@@ -1456,7 +1480,6 @@ function closeModal() {
     modal.classList.remove("show");
 
     document.body.style.overflow = "";
-
 }
 
 
@@ -1471,7 +1494,7 @@ function uniqueDrinks(drinks) {
     return drinks.filter(
         function(drink) {
 
-            if (
+            if(
                 !drink ||
                 !drink.idDrink ||
                 seen.has(
@@ -1493,7 +1516,6 @@ function uniqueDrinks(drinks) {
 
         }
     );
-
 }
 
 
@@ -1501,37 +1523,39 @@ function getCategoryLabel(category) {
 
     const labels = {
 
-        Cocktail:"Cocktails",
+        Cocktail:
+            "Cocktails",
 
-        "Ordinary Drink":"Classic Drink",
+        "Ordinary Drink":
+            "Classic Drink",
 
-        "Punch / Party Drink":"Party Drink",
+        "Punch / Party Drink":
+            "Party Drink",
 
-        Shake:"Shake",
+        Shake:
+            "Shake",
 
-        "Coffee / Tea":"Coffee & Tea",
+        "Coffee / Tea":
+            "Coffee & Tea",
 
-        Non_Alcoholic:"Non-Alcoholic"
+        Non_Alcoholic:
+            "Non-Alcoholic"
 
     };
 
 
-    return (
-        labels[category] ||
-        "Featured Drink"
-    );
-
+    return labels[category] ||
+        "Featured Drink";
 }
 
 
 function truncate(text,max) {
 
-    if (text.length <= max) {
+    if(text.length <= max) {
         return text;
     }
 
     return text.slice(0,max) + "...";
-
 }
 
 
@@ -1542,7 +1566,6 @@ function safeUrl(url) {
     )
         ? url
         : "";
-
 }
 
 
@@ -1566,9 +1589,10 @@ function escapeHtml(value) {
 
         }
     );
-
 }
 
+
+/* ================= LOADING ================= */
 
 function showLoading() {
 
@@ -1583,7 +1607,6 @@ function showLoading() {
         </div>
 
     `;
-
 }
 
 
@@ -1598,17 +1621,16 @@ function showError(message) {
             </h2>
 
             <p style="margin-top:7px">
-
                 ${escapeHtml(message)}
-
             </p>
 
         </div>
 
     `;
-
 }
 
+
+/* ================= TOAST ================= */
 
 function showToast(message) {
 
@@ -1632,5 +1654,4 @@ function showToast(message) {
             },
             2000
         );
-
 }
