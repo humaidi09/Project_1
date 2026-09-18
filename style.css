@@ -4024,4 +4024,794 @@ img {
 
   }
 
+  
+}
+/* =========================================================
+   RESPONSIVE UPDATE
+   TABLET + MOBILE
+   ========================================================= */
+
+
+/* =========================================================
+   LARGE TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .header-inner,
+  .category-inner,
+  .main-container,
+  .hero-inner,
+  .trending-header,
+  .footer-inner {
+    width: calc(100% - 32px);
+  }
+
+
+  /* Header */
+
+  .header-inner {
+    gap: 18px;
+  }
+
+  .brand {
+    font-size: 18px;
+  }
+
+  .search-area {
+    max-width: none;
+  }
+
+
+  /* Hero */
+
+  .hero-inner {
+    height: 310px;
+    min-height: 310px;
+  }
+
+  .hero-content {
+    width: 58%;
+  }
+
+  .hero h1 {
+    font-size: 44px;
+    letter-spacing: -2px;
+  }
+
+  .hero p {
+    max-width: 430px;
+  }
+
+
+  /* Hero drinks */
+
+  .side-drink-left {
+    left: -105px;
+    transform: scale(.85) rotate(-10deg);
+  }
+
+  .hero-drinks {
+    right: -110px;
+    transform: scale(.88);
+    transform-origin: center right;
+  }
+
+
+  /* Products */
+
+  .shop-layout {
+    grid-template-columns:
+      minmax(0, 1fr) 280px;
+
+    gap: 14px;
+  }
+
+  .product-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* Collections */
+
+  .collection-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  /* Header */
+
+  .header-inner {
+    min-height: 62px;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 17px;
+    letter-spacing: 1.2px;
+  }
+
+  .search-area {
+    height: 39px;
+  }
+
+  .search-area button {
+    width: 82px;
+  }
+
+
+  /* Category */
+
+  .category-item {
+    padding:
+      11px 10px;
+  }
+
+
+  /* Hero */
+
+  .hero-inner {
+    height: 300px;
+    min-height: 300px;
+  }
+
+  .hero-content {
+    width: 62%;
+  }
+
+  .hero h1 {
+    max-width: 440px;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .hero p {
+    max-width: 390px;
+    font-size: 9px;
+  }
+
+  .hero-buttons {
+    margin-top: 13px;
+  }
+
+
+  /* Left drink */
+
+  .side-drink-left {
+    left: -120px;
+    opacity: .65;
+  }
+
+
+  /* Right drinks */
+
+  .hero-drinks {
+    right: -155px;
+    transform: scale(.78);
+    transform-origin: center right;
+    opacity: .85;
+  }
+
+
+  /* Main layout */
+
+  .shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Group moves below products */
+
+  .group-sidebar {
+    position: static;
+    width: 100%;
+  }
+
+
+  .group-card {
+    width: 100%;
+  }
+
+
+  /* Product */
+
+  .product-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  /* Collections */
+
+  .collection-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET / LARGE MOBILE
+   ========================================================= */
+
+@media (max-width: 680px) {
+
+  /* Header */
+
+  .header-inner {
+    width: calc(100% - 24px);
+    flex-wrap: wrap;
+    padding: 10px 0;
+    min-height: auto;
+  }
+
+  .brand {
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .search-area {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+    max-width: none;
+  }
+
+
+  /* Category */
+
+  .category-inner {
+    width: calc(100% - 16px);
+  }
+
+  .category-item {
+    padding:
+      11px 9px;
+    font-size: 8px;
+  }
+
+
+  /* Hero */
+
+  .hero-inner {
+    width: calc(100% - 24px);
+    height: 330px;
+    min-height: 330px;
+    align-items: flex-start;
+  }
+
+  .hero-content {
+    width: 100%;
+    padding-top: 38px;
+    z-index: 20;
+  }
+
+  .hero h1 {
+    max-width: 430px;
+    font-size: 38px;
+    letter-spacing: -1.8px;
+  }
+
+  .hero p {
+    max-width: 360px;
+    font-size: 9px;
+  }
+
+
+  /* Left drink hidden */
+
+  .side-drink-left {
+    display: none;
+  }
+
+
+  /* Right drinks become background */
+
+  .hero-drinks {
+    right: -175px;
+    top: 70px;
+    transform: scale(.72);
+    opacity: .32;
+  }
+
+
+  .hero-primary,
+  .hero-secondary {
+    height: 38px;
+  }
+
+
+  /* Trending */
+
+  .trending-section {
+    padding:
+      24px 0;
+  }
+
+  .trending-header {
+    width:
+      calc(100% - 24px);
+  }
+
+
+  /* Main */
+
+  .main-container {
+    width:
+      calc(100% - 24px);
+  }
+
+  .drinks-section {
+    padding-top:
+      30px;
+  }
+
+
+  /* Products */
+
+  .product-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .product-image {
+    height: 180px;
+  }
+
+  .product-body {
+    padding: 11px;
+  }
+
+  .product-body h3 {
+    font-size: 12px;
+  }
+
+  .final-price {
+    font-size: 17px;
+  }
+
+
+  /* Collections */
+
+  .collection-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+  /* Header */
+
+  .header-inner {
+    width:
+      calc(100% - 20px);
+  }
+
+  .header-actions {
+    gap: 12px;
+    font-size: 8px;
+  }
+
+  .group-link span {
+    width: 17px;
+    height: 17px;
+  }
+
+
+  /* Hero */
+
+  .hero-inner {
+    width:
+      calc(100% - 20px);
+
+    height:
+      320px;
+
+    min-height:
+      320px;
+  }
+
+  .hero-content {
+    padding-top:
+      34px;
+  }
+
+  .hero-label {
+    font-size:
+      6px;
+
+    padding:
+      5px 8px;
+  }
+
+  .hero h1 {
+    max-width:
+      350px;
+
+    font-size:
+      35px;
+
+    letter-spacing:
+      -1.5px;
+  }
+
+  .hero p {
+    max-width:
+      310px;
+
+    font-size:
+      8px;
+
+    line-height:
+      1.6;
+  }
+
+  .hero-buttons {
+    gap:
+      7px;
+
+    margin-top:
+      14px;
+  }
+
+  .hero-primary,
+  .hero-secondary {
+    height:
+      35px;
+
+    padding:
+      0 13px;
+
+    font-size:
+      8px;
+  }
+
+
+  /* Right animation */
+
+  .hero-drinks {
+    right:
+      -190px;
+
+    top:
+      85px;
+
+    transform:
+      scale(.65);
+
+    opacity:
+      .22;
+  }
+
+
+  /* Trending */
+
+  .trending-header h2 {
+    font-size:
+      19px;
+  }
+
+  .trending-card {
+    width:
+      175px;
+
+    flex-basis:
+      175px;
+  }
+
+
+  /* Product */
+
+  .product-grid {
+    grid-template-columns:
+      1fr 1fr;
+
+    gap:
+      8px;
+  }
+
+  .product-image {
+    height:
+      155px;
+  }
+
+  .product-body {
+    padding:
+      9px;
+  }
+
+  .product-body h3 {
+    font-size:
+      11px;
+
+    min-height:
+      31px;
+  }
+
+  .product-category {
+    font-size:
+      6px;
+  }
+
+  .product-instruction {
+    font-size:
+      8px;
+
+    height:
+      25px;
+  }
+
+  .old-price {
+    font-size:
+      8px;
+  }
+
+  .discount {
+    font-size:
+      7px;
+  }
+
+  .final-price {
+    font-size:
+      16px;
+  }
+
+  .product-actions {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      5px;
+  }
+
+  .product-actions button {
+    min-height:
+      34px;
+
+    font-size:
+      7px;
+  }
+
+
+  /* Group */
+
+  .group-card {
+    padding:
+      14px;
+  }
+
+
+  /* Collections */
+
+  .collection-card img {
+    height:
+      145px;
+  }
+
+
+  /* Modal */
+
+  .modal-overlay {
+    padding:
+      10px;
+  }
+
+  .details-modal {
+    max-height:
+      94vh;
+
+    border-radius:
+      10px;
+  }
+
+  .modal-image,
+  .modal-image img {
+    min-height:
+      220px;
+
+    height:
+      220px;
+  }
+
+  .modal-info {
+    padding:
+      18px;
+  }
+
+  .modal-info h2 {
+    font-size:
+      22px;
+  }
+
+  .info-grid {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  /* Footer */
+
+  .footer-inner {
+    width:
+      calc(100% - 20px);
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .brand {
+    font-size:
+      15px;
+  }
+
+  .header-actions {
+    display:
+      none;
+  }
+
+
+  /* Search */
+
+  .search-area button {
+    width:
+      70px;
+  }
+
+
+  /* Hero */
+
+  .hero-inner {
+    height:
+      330px;
+
+    min-height:
+      330px;
+  }
+
+  .hero h1 {
+    font-size:
+      32px;
+
+    max-width:
+      310px;
+  }
+
+  .hero p {
+    max-width:
+      280px;
+  }
+
+
+  .hero-buttons {
+    flex-direction:
+      row;
+
+    flex-wrap:
+      wrap;
+  }
+
+  .hero-primary,
+  .hero-secondary {
+    width:
+      auto;
+  }
+
+
+  /* Product */
+
+  .product-image {
+    height:
+      140px;
+  }
+
+  .product-body h3 {
+    font-size:
+      10px;
+  }
+
+  .final-price {
+    font-size:
+      15px;
+  }
+
+
+  /* Collection */
+
+  .collection-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+
+  .product-card:hover {
+    transform:
+      none;
+
+    box-shadow:
+      none;
+  }
+
+  .collection-card:hover {
+    transform:
+      none;
+
+    box-shadow:
+      none;
+  }
+
+  .trending-card:hover {
+    transform:
+      none;
+
+    box-shadow:
+      none;
+  }
+
+}
+
+
+/* =========================================================
+   PREVENT HORIZONTAL OVERFLOW
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  html,
+  body {
+    max-width:
+      100%;
+
+    overflow-x:
+      hidden;
+  }
+
+  .hero,
+  .trending-section,
+  .main-container,
+  .footer {
+    max-width:
+      100%;
+
+    overflow-x:
+      clip;
+  }
+
 }
