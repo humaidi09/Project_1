@@ -1425,7 +1425,36 @@ footer {
     8px;
 
 }
+.developer-credit {
 
+  margin-top: 14px;
+
+  padding-top: 12px;
+
+  border-top:
+    1px solid #303030;
+
+  color:
+    #777;
+
+  font-size:
+    9px;
+
+}
+
+
+.developer-credit strong {
+
+  color:
+    #f0f0f0;
+
+  font-size:
+    9px;
+
+  letter-spacing:
+    0;
+
+}
 
 /* ================= MODAL ================= */
 
