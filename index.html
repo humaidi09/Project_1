@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Drinkly | Premium Drinks</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="nav-container">
+
+            <a href="#" class="logo">
+                DRINKLY
+            </a>
+
+            <div class="nav-links">
+                <a href="#drinks">Drinks</a>
+                <a href="#group">My Group</a>
+                <a href="#about">About</a>
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                PREMIUM DRINK COLLECTION
+            </div>
+
+            <h1>
+                Find your perfect drink.
+            </h1>
+
+            <p>
+                Explore a curated collection of cocktails,
+                discover new flavors, and build your personal
+                drink selection.
+            </p>
+
+            <a href="#drinks" class="hero-btn">
+                Explore Drinks
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- SEARCH -->
+
+    <section class="search-section">
+
+        <div class="search-container">
+
+            <div class="search-heading">
+
+                <span>
+                    DISCOVER
+                </span>
+
+                <h2>
+                    Explore our drinks
+                </h2>
+
+                <p>
+                    Search from our collection of cocktails.
+                </p>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <input type="text" id="searchInput" placeholder="Search for a drink..." autocomplete="off">
+
+                <button id="searchBtn" class="search-btn">
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <main class="main-layout">
+
+
+        <!-- DRINKS -->
+
+        <section class="drinks-section" id="drinks">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="small-label">
+                        OUR COLLECTION
+                    </span>
+
+                    <h2>
+                        Featured Drinks
+                    </h2>
+
+                </div>
+
+                <span id="resultText" class="result-text">
+                    Showing 10 drinks
+                </span>
+
+            </div>
+
+
+            <div id="drinksContainer" class="drinks-grid">
+
+                <div class="loading">
+
+                    <div class="loader"></div>
+
+                    Loading drinks...
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GROUP -->
+
+        <aside class="group-section" id="group">
+
+            <div class="group-card">
+
+                <div class="group-header">
+
+                    <div>
+
+                        <span class="small-label">
+                            YOUR SELECTION
+                        </span>
+
+                        <h2>
+                            My Drink Group
+                        </h2>
+
+                    </div>
+
+
+                    <div class="count" id="drinkCount">
+                        0
+                    </div>
+
+                </div>
+
+
+                <div class="group-limit">
+
+                    <div>
+
+                        <span>
+                            Selection progress
+                        </span>
+
+                        <strong>
+                            <span id="currentCount">
+                                0
+                            </span>
+                            / 7
+                        </strong>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div class="progress-bar" id="progressBar"></div>
+
+                    </div>
+
+                </div>
+
+
+                <ul id="selectedDrinks" class="selected-drinks">
+
+                    <li class="empty">
+
+                        Your selected drinks will appear here.
+
+                    </li>
+
+                </ul>
+
+
+                <div class="group-footer">
+
+                    Maximum 7 drinks can be selected.
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- ABOUT -->
+
+    <section class="about" id="about">
+
+        <div class="about-content">
+
+            <span class="small-label">
+                ABOUT DRINKLY
+            </span>
+
+            <h2>
+                Discover something worth tasting.
+            </h2>
+
+            <p>
+                Drinkly makes it simple to explore different
+                cocktails, learn about their ingredients and
+                create your own selection.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-logo">
+                DRINKLY
+            </div>
+
+            <p>
+                Premium drink discovery experience.
+            </p>
+
+            <span>
+                SDP Assignment 02
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- DETAILS MODAL -->
+
+    <div class="modal" id="detailsModal">
+
+        <div class="modal-box">
+
+            <button class="close" id="closeModal">
+                ×
+            </button>
+
+
+            <div id="modalBody">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast">
+        Drink added to your group.
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
