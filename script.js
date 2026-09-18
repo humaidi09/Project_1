@@ -29,79 +29,58 @@ const usedCollectionIds =
 /* ================= ELEMENTS ================= */
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 const searchBtn =
-    document.getElementById(
-        "searchBtn"
-    );
+    document.getElementById("searchBtn");
 
 const drinksContainer =
-    document.getElementById(
-        "drinksContainer"
-    );
+    document.getElementById("drinksContainer");
 
 const resultText =
-    document.getElementById(
-        "resultText"
-    );
+    document.getElementById("resultText");
 
 const filterName =
-    document.getElementById(
-        "filterName"
-    );
+    document.getElementById("filterName");
 
 const resetFilter =
-    document.getElementById(
-        "resetFilter"
-    );
+    document.getElementById("resetFilter");
 
 const selectedDrinksList =
-    document.getElementById(
-        "selectedDrinks"
-    );
+    document.getElementById("selectedDrinks");
 
 const drinkCount =
-    document.getElementById(
-        "drinkCount"
-    );
+    document.getElementById("drinkCount");
 
 const currentCount =
-    document.getElementById(
-        "currentCount"
-    );
+    document.getElementById("currentCount");
 
 const navCount =
-    document.getElementById(
-        "navCount"
-    );
+    document.getElementById("navCount");
 
 const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
+    document.getElementById("progressBar");
+
+const subtotalElement =
+    document.getElementById("subtotal");
+
+const totalDiscountElement =
+    document.getElementById("totalDiscount");
+
+const grandTotalElement =
+    document.getElementById("grandTotal");
 
 const modal =
-    document.getElementById(
-        "detailsModal"
-    );
+    document.getElementById("detailsModal");
 
 const modalBody =
-    document.getElementById(
-        "modalBody"
-    );
+    document.getElementById("modalBody");
 
 const closeModalBtn =
-    document.getElementById(
-        "closeModal"
-    );
+    document.getElementById("closeModal");
 
 const toast =
-    document.getElementById(
-        "toast"
-    );
+    document.getElementById("toast");
 
 
 /* ================= INITIALIZE ================= */
@@ -124,28 +103,20 @@ async function initialize() {
 
 
 /* =====================================================
-   API
+   API REQUEST
    ===================================================== */
 
-async function apiRequest(
-    endpoint
-) {
+async function apiRequest(endpoint) {
 
-    if (
-        cache.has(endpoint)
-    ) {
+    if (cache.has(endpoint)) {
 
-        return cache.get(
-            endpoint
-        );
+        return cache.get(endpoint);
 
     }
 
 
     const response =
-        await fetch(
-            API + endpoint
-        );
+        await fetch(API + endpoint);
 
 
     if (!response.ok) {
@@ -192,19 +163,8 @@ async function loadDefaultDrinks() {
         const basicDrinks =
             uniqueDrinks(
                 data.drinks || []
-            ).slice(
-                0,
-                10
-            );
+            ).slice(0, 10);
 
-
-        /*
-         * search.php provides the main
-         * drink information. We enrich
-         * each drink with details so the
-         * cards can show instructions
-         * and proper category.
-         */
 
         allDrinks =
             await enrichDrinks(
@@ -216,9 +176,7 @@ async function loadDefaultDrinks() {
             "all";
 
 
-        setCategoryUI(
-            "all"
-        );
+        setCategoryUI("all");
 
 
         resultText.textContent =
@@ -226,6 +184,7 @@ async function loadDefaultDrinks() {
 
 
         renderProducts();
+
 
     } catch (error) {
 
@@ -252,11 +211,9 @@ searchBtn.addEventListener(
 
 searchInput.addEventListener(
     "keydown",
-    function (event) {
+    function(event) {
 
-        if (
-            event.key === "Enter"
-        ) {
+        if (event.key === "Enter") {
 
             searchDrinks();
 
@@ -289,9 +246,7 @@ async function searchDrinks() {
         const data =
             await apiRequest(
                 "search.php?s=" +
-                encodeURIComponent(
-                    query
-                )
+                encodeURIComponent(query)
             );
 
 
@@ -301,9 +256,7 @@ async function searchDrinks() {
             );
 
 
-        if (
-            basicDrinks.length === 0
-        ) {
+        if (basicDrinks.length === 0) {
 
             resultText.textContent =
                 "0 results";
@@ -344,9 +297,7 @@ async function searchDrinks() {
             "all";
 
 
-        setCategoryUI(
-            "all"
-        );
+        setCategoryUI("all");
 
 
         resultText.textContent =
@@ -361,9 +312,7 @@ async function searchDrinks() {
 
 
         document
-            .getElementById(
-                "drinks"
-            )
+            .getElementById("drinks")
             .scrollIntoView({
                 behavior: "smooth"
             });
@@ -383,56 +332,48 @@ async function searchDrinks() {
 
 
 /* =====================================================
-   CATEGORY NAV
+   CATEGORY
    ===================================================== */
 
 document
-    .querySelectorAll(
-        ".category-item"
-    )
-    .forEach(
-        function (button) {
+    .querySelectorAll(".category-item")
+    .forEach(function(button) {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function() {
 
-                    loadCategory(
-                        button.dataset.category
-                    );
+                loadCategory(
+                    button.dataset.category
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 document
-    .querySelectorAll(
-        ".browse-card"
-    )
-    .forEach(
-        function (button) {
+    .querySelectorAll(".browse-card")
+    .forEach(function(button) {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function() {
 
-                    loadCategory(
-                        button.dataset.category
-                    );
+                loadCategory(
+                    button.dataset.category
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 resetFilter.addEventListener(
     "click",
-    function () {
+    function() {
 
         searchInput.value = "";
 
@@ -442,13 +383,9 @@ resetFilter.addEventListener(
 );
 
 
-async function loadCategory(
-    category
-) {
+async function loadCategory(category) {
 
-    if (
-        category === "all"
-    ) {
+    if (category === "all") {
 
         await loadDefaultDrinks();
 
@@ -465,10 +402,7 @@ async function loadCategory(
         let data;
 
 
-        if (
-            category ===
-            "Non_Alcoholic"
-        ) {
+        if (category === "Non_Alcoholic") {
 
             data =
                 await apiRequest(
@@ -480,9 +414,7 @@ async function loadCategory(
             data =
                 await apiRequest(
                     "filter.php?c=" +
-                    encodeURIComponent(
-                        category
-                    )
+                    encodeURIComponent(category)
                 );
 
         }
@@ -494,9 +426,7 @@ async function loadCategory(
             );
 
 
-        if (
-            basicDrinks.length === 0
-        ) {
+        if (basicDrinks.length === 0) {
 
             drinksContainer.innerHTML = `
 
@@ -519,12 +449,6 @@ async function loadCategory(
         }
 
 
-        /*
-         * Enrich category results with
-         * lookup endpoint so the card
-         * receives full information.
-         */
-
         allDrinks =
             await enrichDrinks(
                 basicDrinks
@@ -535,9 +459,7 @@ async function loadCategory(
             category;
 
 
-        setCategoryUI(
-            category
-        );
+        setCategoryUI(category);
 
 
         resultText.textContent =
@@ -548,9 +470,7 @@ async function loadCategory(
 
 
         document
-            .getElementById(
-                "drinks"
-            )
+            .getElementById("drinks")
             .scrollIntoView({
                 behavior: "smooth"
             });
@@ -570,29 +490,20 @@ async function loadCategory(
 
 
 /* =====================================================
-   ENRICH DRINK DATA
+   ENRICH DATA
    ===================================================== */
 
-async function enrichDrinks(
-    drinks
-) {
-
-    /*
-     * Limit concurrent requests so
-     * the API isn't unnecessarily flooded.
-     */
+async function enrichDrinks(drinks) {
 
     const limited =
-        drinks.slice(
-            0,
-            30
-        );
+        drinks.slice(0, 30);
 
 
     const details =
         await Promise.all(
+
             limited.map(
-                async function (drink) {
+                async function(drink) {
 
                     try {
 
@@ -616,12 +527,11 @@ async function enrichDrinks(
 
                 }
             )
+
         );
 
 
-    return uniqueDrinks(
-        details
-    );
+    return uniqueDrinks(details);
 
 }
 
@@ -630,25 +540,18 @@ async function enrichDrinks(
    CATEGORY UI
    ===================================================== */
 
-function setCategoryUI(
-    category
-) {
+function setCategoryUI(category) {
 
     document
-        .querySelectorAll(
-            ".category-item"
-        )
-        .forEach(
-            function (button) {
+        .querySelectorAll(".category-item")
+        .forEach(function(button) {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.category ===
-                    category
-                );
+            button.classList.toggle(
+                "active",
+                button.dataset.category === category
+            );
 
-            }
-        );
+        });
 
 
     const names = {
@@ -690,13 +593,10 @@ function setCategoryUI(
 
 function renderProducts() {
 
-    drinksContainer.innerHTML =
-        "";
+    drinksContainer.innerHTML = "";
 
 
-    if (
-        allDrinks.length === 0
-    ) {
+    if (allDrinks.length === 0) {
 
         drinksContainer.innerHTML = `
 
@@ -716,12 +616,10 @@ function renderProducts() {
 
 
     allDrinks.forEach(
-        function (drink) {
+        function(drink) {
 
             drinksContainer.appendChild(
-                createProductCard(
-                    drink
-                )
+                createProductCard(drink)
             );
 
         }
@@ -731,17 +629,70 @@ function renderProducts() {
 
 
 /* =====================================================
+   PRICE SYSTEM
+   ===================================================== */
+
+function getPriceData(drink) {
+
+    const id =
+        parseInt(
+            drink.idDrink,
+            10
+        ) || 100;
+
+
+    /*
+     * Generates consistent demo
+     * marketplace prices.
+     */
+
+    const basePrice =
+        7.50 +
+        (id % 12) * 0.75;
+
+
+    const discount =
+        10 +
+        (id % 4) * 5;
+
+
+    const discountAmount =
+        basePrice *
+        discount /
+        100;
+
+
+    const finalPrice =
+        basePrice -
+        discountAmount;
+
+
+    return {
+
+        basePrice:
+            Number(basePrice.toFixed(2)),
+
+        discount,
+
+        discountAmount:
+            Number(discountAmount.toFixed(2)),
+
+        finalPrice:
+            Number(finalPrice.toFixed(2))
+
+    };
+
+}
+
+
+/* =====================================================
    PRODUCT CARD
    ===================================================== */
 
-function createProductCard(
-    drink
-) {
+function createProductCard(drink) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
 
     card.className =
@@ -752,11 +703,6 @@ function createProductCard(
         drink.strDrink ||
         "Drink";
 
-
-    /*
-     * Never display "Other / Unknown".
-     * Use a meaningful fallback.
-     */
 
     const category =
         drink.strCategory ||
@@ -775,8 +721,12 @@ function createProductCard(
 
 
     const alreadyAdded =
-        selectedDrinks.includes(
-            name
+        selectedDrinks.some(
+            function(item) {
+
+                return item.name === name;
+
+            }
         );
 
 
@@ -787,6 +737,10 @@ function createProductCard(
             : "ALCOHOLIC";
 
 
+    const price =
+        getPriceData(drink);
+
+
     card.innerHTML = `
 
         <div class="product-image">
@@ -795,16 +749,12 @@ function createProductCard(
                 src="${safeUrl(
                     drink.strDrinkThumb
                 )}"
-                alt="${escapeHtml(
-                    name
-                )}"
+                alt="${escapeHtml(name)}"
                 loading="lazy"
             >
 
             <span class="product-badge">
-
                 ${alcoholic}
-
             </span>
 
         </div>
@@ -813,9 +763,7 @@ function createProductCard(
         <div class="product-body">
 
             <h3>
-
                 ${escapeHtml(name)}
-
             </h3>
 
 
@@ -828,9 +776,7 @@ function createProductCard(
 
             <p
                 class="product-instruction"
-                title="${escapeHtml(
-                    instruction
-                )}"
+                title="${escapeHtml(instruction)}"
             >
 
                 ${escapeHtml(
@@ -841,6 +787,31 @@ function createProductCard(
                 )}
 
             </p>
+
+
+            <div class="price-area">
+
+                <span class="old-price">
+
+                    $${price.basePrice.toFixed(2)}
+
+                </span>
+
+
+                <span class="discount">
+
+                    ${price.discount}% OFF
+
+                </span>
+
+
+                <strong class="final-price">
+
+                    $${price.finalPrice.toFixed(2)}
+
+                </strong>
+
+            </div>
 
 
             <div class="product-actions">
@@ -877,15 +848,14 @@ function createProductCard(
 
 
     card
-        .querySelector(
-            ".add-btn"
-        )
+        .querySelector(".add-btn")
         .addEventListener(
             "click",
-            function () {
+            function() {
 
                 addToGroup(
-                    name
+                    drink,
+                    price
                 );
 
             }
@@ -893,12 +863,10 @@ function createProductCard(
 
 
     card
-        .querySelector(
-            ".details-btn"
-        )
+        .querySelector(".details-btn")
         .addEventListener(
             "click",
-            function () {
+            function() {
 
                 showDetails(
                     drink.idDrink
@@ -914,17 +882,10 @@ function createProductCard(
 
 
 /* =====================================================
-   GROUP
+   ADD TO GROUP
    ===================================================== */
 
-function addToGroup(
-    name
-) {
-
-    /*
-     * Mandatory assignment requirement:
-     * Maximum 7.
-     */
+function addToGroup(drink, price) {
 
     if (
         selectedDrinks.length >=
@@ -940,11 +901,17 @@ function addToGroup(
     }
 
 
-    if (
-        selectedDrinks.includes(
-            name
-        )
-    ) {
+    const exists =
+        selectedDrinks.some(
+            function(item) {
+
+                return item.id === drink.idDrink;
+
+            }
+        );
+
+
+    if (exists) {
 
         alert(
             "This drink is already in your group!"
@@ -955,9 +922,18 @@ function addToGroup(
     }
 
 
-    selectedDrinks.push(
-        name
-    );
+    selectedDrinks.push({
+
+        id:
+            drink.idDrink,
+
+        name:
+            drink.strDrink,
+
+        price:
+            price
+
+    });
 
 
     updateGroup();
@@ -971,6 +947,10 @@ function addToGroup(
 
 }
 
+
+/* =====================================================
+   UPDATE GROUP
+   ===================================================== */
 
 function updateGroup() {
 
@@ -998,9 +978,10 @@ function updateGroup() {
         ) + "%";
 
 
-    if (
-        count === 0
-    ) {
+    calculateTotals();
+
+
+    if (count === 0) {
 
         selectedDrinksList.innerHTML = `
 
@@ -1022,25 +1003,31 @@ function updateGroup() {
 
 
     selectedDrinks.forEach(
-        function (
-            name,
-            index
-        ) {
+        function(item, index) {
 
-            const item =
-                document.createElement(
-                    "li"
-                );
+            const listItem =
+                document.createElement("li");
 
 
-            item.innerHTML = `
+            listItem.innerHTML = `
 
-                <span>
+                <div class="selected-drink-info">
 
-                    ${index + 1}.
-                    ${escapeHtml(name)}
+                    <span class="selected-drink-name">
 
-                </span>
+                        ${index + 1}.
+                        ${escapeHtml(item.name)}
+
+                    </span>
+
+
+                    <span class="selected-drink-price">
+
+                        $${item.price.finalPrice.toFixed(2)}
+
+                    </span>
+
+                </div>
 
 
                 <button
@@ -1056,13 +1043,11 @@ function updateGroup() {
             `;
 
 
-            item
-                .querySelector(
-                    ".remove"
-                )
+            listItem
+                .querySelector(".remove")
                 .addEventListener(
                     "click",
-                    function () {
+                    function() {
 
                         selectedDrinks.splice(
                             index,
@@ -1084,11 +1069,56 @@ function updateGroup() {
 
 
             selectedDrinksList.appendChild(
-                item
+                listItem
             );
 
         }
     );
+
+}
+
+
+/* =====================================================
+   CALCULATE TOTALS
+   ===================================================== */
+
+function calculateTotals() {
+
+    let subtotal = 0;
+
+    let discount = 0;
+
+
+    selectedDrinks.forEach(
+        function(item) {
+
+            subtotal +=
+                item.price.basePrice;
+
+            discount +=
+                item.price.discountAmount;
+
+        }
+    );
+
+
+    const total =
+        subtotal - discount;
+
+
+    subtotalElement.textContent =
+        "$" +
+        subtotal.toFixed(2);
+
+
+    totalDiscountElement.textContent =
+        "-$" +
+        discount.toFixed(2);
+
+
+    grandTotalElement.textContent =
+        "$" +
+        total.toFixed(2);
 
 }
 
@@ -1110,6 +1140,7 @@ async function loadCollections() {
 
             category:
                 "Cocktail"
+
         },
 
         {
@@ -1118,6 +1149,7 @@ async function loadCollections() {
 
             category:
                 "Ordinary Drink"
+
         },
 
         {
@@ -1126,6 +1158,7 @@ async function loadCollections() {
 
             category:
                 "Punch / Party Drink"
+
         },
 
         {
@@ -1134,16 +1167,11 @@ async function loadCollections() {
 
             category:
                 "Non_Alcoholic"
+
         }
 
     ];
 
-
-    /*
-     * Sequential loading is intentional.
-     * It lets the global ID Set prevent
-     * duplicate drinks between sections.
-     */
 
     for (
         const collection
@@ -1186,9 +1214,7 @@ async function loadCollections() {
 
         } catch (error) {
 
-            console.error(
-                error
-            );
+            console.error(error);
 
         }
 
@@ -1212,22 +1238,16 @@ function renderCollection(
         );
 
 
-    grid.innerHTML =
-        "";
+    grid.innerHTML = "";
 
 
-    let count =
-        0;
+    let count = 0;
 
 
     for (
         const drink
         of uniqueDrinks(drinks)
     ) {
-
-        /*
-         * Global deduplication.
-         */
 
         if (
             usedCollectionIds.has(
@@ -1290,7 +1310,7 @@ function renderCollection(
 
         card.addEventListener(
             "click",
-            function () {
+            function() {
 
                 showDetails(
                     drink.idDrink
@@ -1304,17 +1324,13 @@ function renderCollection(
             "pointer";
 
 
-        grid.appendChild(
-            card
-        );
+        grid.appendChild(card);
 
 
         count++;
 
 
-        if (
-            count >= 10
-        ) {
+        if (count >= 10) {
 
             break;
 
@@ -1330,52 +1346,43 @@ function renderCollection(
    ===================================================== */
 
 document
-    .querySelectorAll(
-        ".see-more"
-    )
-    .forEach(
-        function (button) {
+    .querySelectorAll(".see-more")
+    .forEach(function(button) {
 
-            button.addEventListener(
-                "click",
-                function () {
+        button.addEventListener(
+            "click",
+            function() {
 
-                    const grid =
-                        document.getElementById(
-                            button.dataset.target
-                        );
+                const grid =
+                    document.getElementById(
+                        button.dataset.target
+                    );
 
 
-                    const expanded =
-                        grid.classList.toggle(
-                            "expanded"
-                        );
+                const expanded =
+                    grid.classList.toggle(
+                        "expanded"
+                    );
 
 
-                    button.innerHTML =
-                        expanded
-                            ? "Show Less ↑"
-                            : "See More →";
+                button.innerHTML =
+                    expanded
+                        ? "Show Less ↑"
+                        : "See More →";
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 /* =====================================================
    DETAILS MODAL
    ===================================================== */
 
-async function showDetails(
-    id
-) {
+async function showDetails(id) {
 
-    modal.classList.add(
-        "show"
-    );
-
+    modal.classList.add("show");
 
     document.body.style.overflow =
         "hidden";
@@ -1399,9 +1406,7 @@ async function showDetails(
         const data =
             await apiRequest(
                 "lookup.php?i=" +
-                encodeURIComponent(
-                    id
-                )
+                encodeURIComponent(id)
             );
 
 
@@ -1430,21 +1435,17 @@ async function showDetails(
 
             const ingredient =
                 drink[
-                    "strIngredient" +
-                    i
+                    "strIngredient" + i
                 ];
 
 
             const measure =
                 drink[
-                    "strMeasure" +
-                    i
+                    "strMeasure" + i
                 ];
 
 
-            if (
-                ingredient
-            ) {
+            if (ingredient) {
 
                 ingredients.push(`
 
@@ -1468,6 +1469,10 @@ async function showDetails(
             }
 
         }
+
+
+        const price =
+            getPriceData(drink);
 
 
         modalBody.innerHTML = `
@@ -1539,13 +1544,10 @@ async function showDetails(
                 <div>
 
                     <strong>
-                        IBA
+                        Price
                     </strong>
 
-                    ${escapeHtml(
-                        drink.strIBA ||
-                        "N/A"
-                    )}
+                    $${price.finalPrice.toFixed(2)}
 
                 </div>
 
@@ -1622,7 +1624,7 @@ closeModalBtn.addEventListener(
 
 modal.addEventListener(
     "click",
-    function (event) {
+    function(event) {
 
         if (
             event.target === modal
@@ -1638,7 +1640,7 @@ modal.addEventListener(
 
 document.addEventListener(
     "keydown",
-    function (event) {
+    function(event) {
 
         if (
             event.key === "Escape"
@@ -1669,16 +1671,14 @@ function closeModal() {
    HELPERS
    ===================================================== */
 
-function uniqueDrinks(
-    drinks
-) {
+function uniqueDrinks(drinks) {
 
     const seen =
         new Set();
 
 
     return drinks.filter(
-        function (drink) {
+        function(drink) {
 
             if (
                 !drink ||
@@ -1706,9 +1706,7 @@ function uniqueDrinks(
 }
 
 
-function getCategoryLabel(
-    category
-) {
+function getCategoryLabel(category) {
 
     const labels = {
 
@@ -1741,10 +1739,7 @@ function getCategoryLabel(
 }
 
 
-function truncate(
-    text,
-    max
-) {
+function truncate(text, max) {
 
     if (
         text.length <= max
@@ -1756,19 +1751,14 @@ function truncate(
 
 
     return (
-        text.slice(
-            0,
-            max
-        ) +
+        text.slice(0, max) +
         "..."
     );
 
 }
 
 
-function safeUrl(
-    url
-) {
+function safeUrl(url) {
 
     return /^https?:\/\//i.test(
         url || ""
@@ -1779,15 +1769,13 @@ function safeUrl(
 }
 
 
-function escapeHtml(
-    value
-) {
+function escapeHtml(value) {
 
     return String(
         value ?? ""
     ).replace(
         /[&<>"']/g,
-        function (character) {
+        function(character) {
 
             return {
 
@@ -1835,9 +1823,7 @@ function showLoading() {
 }
 
 
-function showError(
-    message
-) {
+function showError(message) {
 
     drinksContainer.innerHTML = `
 
@@ -1849,9 +1835,7 @@ function showError(
 
             <p style="margin-top:7px">
 
-                ${escapeHtml(
-                    message
-                )}
+                ${escapeHtml(message)}
 
             </p>
 
@@ -1866,9 +1850,7 @@ function showError(
    TOAST
    ===================================================== */
 
-function showToast(
-    message
-) {
+function showToast(message) {
 
     toast.textContent =
         message;
@@ -1886,7 +1868,7 @@ function showToast(
 
     showToast.timer =
         setTimeout(
-            function () {
+            function() {
 
                 toast.classList.remove(
                     "show"

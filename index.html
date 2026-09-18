@@ -2,15 +2,18 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Drinkly | Discover Drinks</title>
+    <title>Drinkly | Drink Marketplace</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
 
     <!-- ================= HEADER ================= -->
 
@@ -24,7 +27,7 @@
 
             <div class="search-area">
 
-                <input id="searchInput" type="search" placeholder="Search for drinks..." autocomplete="off">
+                <input id="searchInput" type="search" placeholder="Search drinks..." autocomplete="off">
 
                 <button id="searchBtn">
                     Search
@@ -43,8 +46,13 @@
                 </a>
 
                 <a href="#group" class="group-link">
+
                     Group
-                    <span id="navCount">0</span>
+
+                    <span id="navCount">
+                        0
+                    </span>
+
                 </a>
 
             </div>
@@ -117,7 +125,7 @@
                 </p>
 
                 <a href="#drinks">
-                    Explore Now
+                    Explore Drinks
                 </a>
 
             </div>
@@ -125,7 +133,7 @@
         </section>
 
 
-        <!-- ================= CATEGORY CARDS ================= -->
+        <!-- ================= BROWSE ================= -->
 
         <section class="browse-section">
 
@@ -138,7 +146,7 @@
                     </small>
 
                     <h2>
-                        Browse categories
+                        Browse Categories
                     </h2>
 
                 </div>
@@ -149,6 +157,7 @@
             <div class="browse-grid">
 
                 <button class="browse-card" data-category="Cocktail">
+
                     <strong>
                         Cocktails
                     </strong>
@@ -156,10 +165,12 @@
                     <span>
                         Classic & modern
                     </span>
+
                 </button>
 
 
                 <button class="browse-card" data-category="Ordinary Drink">
+
                     <strong>
                         Classics
                     </strong>
@@ -167,10 +178,12 @@
                     <span>
                         Timeless drinks
                     </span>
+
                 </button>
 
 
                 <button class="browse-card" data-category="Punch / Party Drink">
+
                     <strong>
                         Party Drinks
                     </strong>
@@ -178,10 +191,12 @@
                     <span>
                         Made to share
                     </span>
+
                 </button>
 
 
                 <button class="browse-card" data-category="Shake">
+
                     <strong>
                         Shakes
                     </strong>
@@ -189,10 +204,12 @@
                     <span>
                         Rich & creamy
                     </span>
+
                 </button>
 
 
                 <button class="browse-card" data-category="Non_Alcoholic">
+
                     <strong>
                         Zero Proof
                     </strong>
@@ -200,6 +217,7 @@
                     <span>
                         No alcohol
                     </span>
+
                 </button>
 
             </div>
@@ -211,8 +229,6 @@
 
         <section class="collections-section" id="collections">
 
-
-            <!-- COLLECTION 1 -->
 
             <div class="collection-block">
 
@@ -231,19 +247,15 @@
                     </div>
 
                     <button class="see-more" data-target="cocktailCollection">
-                        See More
-                        <span>→</span>
+                        See More →
                     </button>
 
                 </div>
-
 
                 <div id="cocktailCollection" class="collection-row"></div>
 
             </div>
 
-
-            <!-- COLLECTION 2 -->
 
             <div class="collection-block">
 
@@ -262,19 +274,15 @@
                     </div>
 
                     <button class="see-more" data-target="classicCollection">
-                        See More
-                        <span>→</span>
+                        See More →
                     </button>
 
                 </div>
-
 
                 <div id="classicCollection" class="collection-row"></div>
 
             </div>
 
-
-            <!-- COLLECTION 3 -->
 
             <div class="collection-block">
 
@@ -293,19 +301,15 @@
                     </div>
 
                     <button class="see-more" data-target="partyCollection">
-                        See More
-                        <span>→</span>
+                        See More →
                     </button>
 
                 </div>
-
 
                 <div id="partyCollection" class="collection-row"></div>
 
             </div>
 
-
-            <!-- COLLECTION 4 -->
 
             <div class="collection-block">
 
@@ -324,12 +328,10 @@
                     </div>
 
                     <button class="see-more" data-target="zeroCollection">
-                        See More
-                        <span>→</span>
+                        See More →
                     </button>
 
                 </div>
-
 
                 <div id="zeroCollection" class="collection-row"></div>
 
@@ -345,7 +347,7 @@
             <div class="products-layout">
 
 
-                <!-- PRODUCT AREA -->
+                <!-- PRODUCTS -->
 
                 <div class="products-area">
 
@@ -402,7 +404,7 @@
                 </div>
 
 
-                <!-- GROUP -->
+                <!-- ================= GROUP / CART ================= -->
 
                 <aside class="group-area" id="group">
 
@@ -458,18 +460,59 @@
                         <ul id="selectedDrinks" class="selected-drinks">
 
                             <li class="empty">
-
                                 No drinks selected yet.
-
                             </li>
 
                         </ul>
 
 
+                        <!-- PRICE SUMMARY -->
+
+                        <div class="price-summary">
+
+                            <div>
+
+                                <span>
+                                    Subtotal
+                                </span>
+
+                                <strong id="subtotal">
+                                    $0.00
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Discount
+                                </span>
+
+                                <strong id="totalDiscount" class="discount-total">
+                                    -$0.00
+                                </strong>
+
+                            </div>
+
+
+                            <div class="grand-total">
+
+                                <span>
+                                    Total
+                                </span>
+
+                                <strong id="grandTotal">
+                                    $0.00
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
                         <div class="group-note">
-
                             Maximum 7 drinks
-
                         </div>
 
                     </div>
@@ -492,13 +535,12 @@
                 </small>
 
                 <h2>
-                    Explore. Discover.
-                    Enjoy.
+                    Explore. Discover. Enjoy.
                 </h2>
 
                 <p>
-                    A simple marketplace-style experience
-                    for discovering drinks from around the world.
+                    A marketplace-style drink discovery
+                    experience powered by TheCocktailDB.
                 </p>
 
             </div>
@@ -510,27 +552,35 @@
 
     <!-- ================= FOOTER ================= -->
 
-<footer>
+    <footer>
 
-    <div class="footer-inner">
+        <div class="footer-inner">
 
-        <strong>
-            DRINKLY
-        </strong>
+            <strong>
+                DRINKLY
+            </strong>
 
-        <p>
-            Drink discovery made simple.
-        </p>
+            <p>
+                Drink discovery made simple.
+            </p>
 
-        <small>
-            SDP Assignment 02
-            ·
-            TheCocktailDB
-        </small>
+            <small>
+                SDP Assignment 02 · TheCocktailDB
+            </small>
 
-    </div>
+            <div class="developer-credit">
 
-</footer>
+                Designed & Developed by
+                <strong>
+                    Hussain Ahmed
+                </strong>
+
+            </div>
+
+        </div>
+
+    </footer>
+
 
     <!-- ================= MODAL ================= -->
 
