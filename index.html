@@ -5,431 +5,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Drinkly | Drink Marketplace</title>
+    <title>Drinkly - Premium Drink Marketplace</title>
 
-    <link rel="stylesheet" href="style.css?v=999">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css?v=1000">
 </head>
 
 <body>
 
+    <!-- HEADER -->
     <header class="top-header">
+        <div class="header-container">
 
-        <div class="header-inner">
+            <a href="#" class="logo">
+                <span>DRINK</span>LY
+            </a>
 
-            <a href="#" class="brand">DRINKLY</a>
+            <nav class="main-nav">
+                <a href="#home">Home</a>
+                <a href="#categories">Categories</a>
+                <a href="#drinks">Drinks</a>
+                <a href="#group">My Group</a>
+            </nav>
 
-            <div class="search-area">
-                <input id="searchInput" type="search" placeholder="Search drinks..." autocomplete="off">
+            <div class="header-actions">
+                <button class="header-btn" onclick="scrollToGroup()">
+                    My Group
+                    <span id="headerGroupCount">0</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- SEARCH -->
+    <section class="search-section" id="home">
+
+        <div class="search-container">
+
+            <div class="search-text">
+                <small>DISCOVER YOUR NEXT FAVORITE</small>
+                <h1>Find Your Perfect Drink</h1>
+                <p>Explore refreshing cocktails, classics and premium drinks.</p>
+            </div>
+
+            <div class="search-box">
+
+                <input type="text" id="searchInput" placeholder="Search drinks by name..." autocomplete="off">
 
                 <button id="searchBtn">
                     Search
                 </button>
-            </div>
-
-            <div class="header-actions">
-
-                <a href="#collections">Collections</a>
-
-                <a href="#drinks">Drinks</a>
-
-                <a href="#group" class="group-link">
-                    Group
-                    <span id="navCount">0</span>
-                </a>
 
             </div>
 
         </div>
 
-    </header>
+    </section>
 
 
-    <div class="category-nav">
+    <!-- CATEGORY NAVIGATION -->
+    <section class="category-section" id="categories">
 
-        <div class="category-inner">
+        <div class="container">
 
-            <button class="category-item active" data-category="all">
-                All
-            </button>
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">EXPLORE</span>
+                    <h2>Browse Categories</h2>
+                </div>
+            </div>
 
-            <button class="category-item" data-category="Cocktail">
-                Cocktails
-            </button>
+            <div class="category-list">
 
-            <button class="category-item" data-category="Ordinary Drink">
-                Classics
-            </button>
+                <button class="category-btn active" data-category="all">
+                    All Drinks
+                </button>
 
-            <button class="category-item" data-category="Punch / Party Drink">
-                Party Drinks
-            </button>
+                <button class="category-btn" data-category="Cocktail">
+                    Cocktails
+                </button>
 
-            <button class="category-item" data-category="Shake">
-                Shakes
-            </button>
+                <button class="category-btn" data-category="Ordinary Drink">
+                    Classic Drinks
+                </button>
 
-            <button class="category-item" data-category="Coffee / Tea">
-                Coffee & Tea
-            </button>
+                <button class="category-btn" data-category="Punch / Party Drink">
+                    Party Drinks
+                </button>
 
-            <button class="category-item" data-category="Non_Alcoholic">
-                Non-Alcoholic
-            </button>
+                <button class="category-btn" data-category="Shake">
+                    Shakes
+                </button>
+
+                <button class="category-btn" data-category="Coffee / Tea">
+                    Coffee & Tea
+                </button>
+
+                <button class="category-btn" data-category="Other / Unknown">
+                    Others
+                </button>
+
+                <button class="category-btn" data-category="Non_Alcoholic">
+                    Non-Alcoholic
+                </button>
+
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <main>
+    <!-- HERO BANNER -->
+    <section class="promo-section">
 
-        <section class="market-banner">
+        <div class="container">
 
-            <div class="banner-content">
+            <div class="promo-banner">
 
-                <span>DRINKLY MARKET</span>
+                <div class="promo-content">
 
-                <h1>
-                    Find a drink
-                    you'll love.
-                </h1>
+                    <span class="promo-label">
+                        DRINK OF THE DAY
+                    </span>
 
-                <p>
-                    Explore cocktails, classics,
-                    refreshing drinks and more.
+                    <h2>Something Refreshing<br>For Every Mood.</h2>
+
+                    <p>
+                        Discover unique flavors and timeless classics
+                        from our growing drink collection.
+                    </p>
+
+                    <button onclick="scrollToDrinks()">
+                        Explore Drinks
+                    </button>
+
+                </div>
+
+                <div class="promo-decoration">
+                    <div class="circle circle-one"></div>
+                    <div class="circle circle-two"></div>
+                    <div class="promo-glass">DRINK</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- COLLECTION 1 -->
+    <section class="collection-section">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">POPULAR NOW</span>
+                    <h2>Popular Picks</h2>
+                </div>
+
+                <button class="see-more" onclick="loadMorePopular()">
+                    See More
+                </button>
+
+            </div>
+
+            <div id="popularGrid" class="collection-grid"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- COLLECTION 2 -->
+    <section class="collection-section alternate">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">CLASSIC COLLECTION</span>
+                    <h2>Classic Favorites</h2>
+                </div>
+
+            </div>
+
+            <div id="classicGrid" class="collection-grid"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN PRODUCTS + GROUP -->
+    <main class="main-marketplace" id="drinks">
+
+        <div class="container marketplace-layout">
+
+            <!-- PRODUCTS -->
+            <section class="products-area">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="eyebrow">SHOP DRINKS</span>
+                        <h2 id="productTitle">All Drinks</h2>
+                        <p id="resultInfo">Showing available drinks</p>
+                    </div>
+
+                    <div class="product-count">
+                        <span id="drinkCount">0</span> drinks
+                    </div>
+
+                </div>
+
+                <div id="loading" class="loading-box">
+                    <div class="loader"></div>
+                    <p>Loading drinks...</p>
+                </div>
+
+                <div id="notFound" class="not-found">
+                    <h3>No drinks found</h3>
+                    <p>Try searching with another drink name.</p>
+                </div>
+
+                <div id="productGrid" class="product-grid"></div>
+
+            </section>
+
+
+            <!-- GROUP SIDEBAR -->
+            <aside class="group-panel" id="group">
+
+                <div class="group-header">
+
+                    <div>
+                        <span class="eyebrow">YOUR SELECTION</span>
+                        <h2>Add to Group</h2>
+                    </div>
+
+                    <span id="groupCount" class="group-count">
+                        0/7
+                    </span>
+
+                </div>
+
+                <p class="group-description">
+                    Add up to 7 drinks to your group.
                 </p>
 
-                <a href="#drinks">
-                    Explore Drinks
-                </a>
 
-            </div>
+                <div id="groupList" class="group-list">
 
-        </section>
-
-
-        <section class="browse-section">
-
-            <div class="section-title">
-
-                <small>DISCOVER</small>
-
-                <h2>Browse Categories</h2>
-
-            </div>
-
-
-            <div class="browse-grid">
-
-                <button class="browse-card" data-category="Cocktail">
-                    <strong>Cocktails</strong>
-                    <span>Classic & modern</span>
-                </button>
-
-                <button class="browse-card" data-category="Ordinary Drink">
-                    <strong>Classics</strong>
-                    <span>Timeless drinks</span>
-                </button>
-
-                <button class="browse-card" data-category="Punch / Party Drink">
-                    <strong>Party Drinks</strong>
-                    <span>Made to share</span>
-                </button>
-
-                <button class="browse-card" data-category="Shake">
-                    <strong>Shakes</strong>
-                    <span>Rich & creamy</span>
-                </button>
-
-                <button class="browse-card" data-category="Non_Alcoholic">
-                    <strong>Zero Proof</strong>
-                    <span>No alcohol</span>
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <section class="collections-section" id="collections">
-
-            <div class="collection-block">
-
-                <div class="collection-heading">
-
-                    <div>
-                        <small>POPULAR NOW</small>
-                        <h2>Cocktail Picks</h2>
+                    <div class="empty-group">
+                        <div class="empty-icon">+</div>
+                        <h3>Your group is empty</h3>
+                        <p>Add drinks from the collection.</p>
                     </div>
-
-                    <button class="see-more" data-target="cocktailCollection">
-                        See More →
-                    </button>
 
                 </div>
 
-                <div id="cocktailCollection" class="collection-row"></div>
 
-            </div>
+                <!-- PRICE SUMMARY -->
+                <div class="price-summary">
 
-
-            <div class="collection-block">
-
-                <div class="collection-heading">
-
-                    <div>
-                        <small>TIMELESS</small>
-                        <h2>Classic Favorites</h2>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <strong id="subtotal">$0</strong>
                     </div>
 
-                    <button class="see-more" data-target="classicCollection">
-                        See More →
-                    </button>
-
-                </div>
-
-                <div id="classicCollection" class="collection-row"></div>
-
-            </div>
-
-
-            <div class="collection-block">
-
-                <div class="collection-heading">
-
-                    <div>
-                        <small>FOR SHARING</small>
-                        <h2>Party Selection</h2>
-                    </div>
-
-                    <button class="see-more" data-target="partyCollection">
-                        See More →
-                    </button>
-
-                </div>
-
-                <div id="partyCollection" class="collection-row"></div>
-
-            </div>
-
-
-            <div class="collection-block">
-
-                <div class="collection-heading">
-
-                    <div>
-                        <small>REFRESHING</small>
-                        <h2>Zero Alcohol</h2>
-                    </div>
-
-                    <button class="see-more" data-target="zeroCollection">
-                        See More →
-                    </button>
-
-                </div>
-
-                <div id="zeroCollection" class="collection-row"></div>
-
-            </div>
-
-        </section>
-
-
-        <section class="products-section" id="drinks">
-
-            <div class="products-layout">
-
-                <div class="products-area">
-
-                    <div class="products-top">
-
-                        <div>
-                            <small>DRINK MARKET</small>
-                            <h2>Explore Drinks</h2>
-                        </div>
-
-                        <span id="resultText">
-                            Showing 10 drinks
-                        </span>
-
-                    </div>
-
-
-                    <div class="filter-bar">
-
-                        <span>Category:</span>
-
-                        <strong id="filterName">
-                            All Drinks
+                    <div class="summary-row discount-row">
+                        <span>Total Discount</span>
+                        <strong id="totalDiscount" class="discount-total">
+                            -$0
                         </strong>
-
-                        <button id="resetFilter">
-                            Reset
-                        </button>
-
                     </div>
 
+                    <div class="summary-divider"></div>
 
-                    <div id="drinksContainer" class="product-grid">
-
-                        <div class="loading">
-                            <div class="spinner"></div>
-                            Loading drinks...
-                        </div>
-
+                    <div class="summary-row total-row">
+                        <span>Grand Total</span>
+                        <strong id="grandTotal">$0</strong>
                     </div>
 
                 </div>
 
+                <button class="clear-group-btn" onclick="clearGroup()">
+                    Clear Group
+                </button>
 
-                <aside class="group-area" id="group">
+            </aside>
 
-                    <div class="group-card">
-
-                        <div class="group-top">
-
-                            <div>
-                                <small>YOUR SELECTION</small>
-
-                                <h2>
-                                    My Drink Group
-                                </h2>
-                            </div>
-
-                            <div id="drinkCount" class="group-count">
-                                0
-                            </div>
-
-                        </div>
-
-
-                        <div class="selection-status">
-
-                            <span>
-                                Selected drinks
-                            </span>
-
-                            <strong>
-
-                                <span id="currentCount">
-                                    0
-                                </span>
-
-                                / 7
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="progress">
-                            <div id="progressBar"></div>
-                        </div>
-
-
-                        <ul id="selectedDrinks" class="selected-drinks">
-
-                            <li class="empty">
-                                No drinks selected yet.
-                            </li>
-
-                        </ul>
-
-
-                        <div class="price-summary">
-
-                            <div>
-
-                                <span>
-                                    Subtotal
-                                </span>
-
-                                <strong id="subtotal">
-                                    ৳0
-                                </strong>
-
-                            </div>
-
-
-                            <div>
-
-                                <span>
-                                    Discount
-                                </span>
-
-                                <strong id="totalDiscount" class="discount-total">
-                                    -৳0
-                                </strong>
-
-                            </div>
-
-
-                            <div class="grand-total">
-
-                                <span>
-                                    Total
-                                </span>
-
-                                <strong id="grandTotal">
-                                    ৳0
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="group-note">
-                            Maximum 7 drinks
-                        </div>
-
-                    </div>
-
-                </aside>
-
-            </div>
-
-        </section>
-
-
-        <section class="about-section">
-
-            <div class="about-inner">
-
-                <small>DRINKLY</small>
-
-                <h2>
-                    Explore. Discover. Enjoy.
-                </h2>
-
-                <p>
-                    A marketplace-style drink discovery
-                    experience powered by TheCocktailDB.
-                </p>
-
-            </div>
-
-        </section>
+        </div>
 
     </main>
 
 
+    <!-- FOOTER -->
     <footer>
 
         <div class="footer-inner">
 
-            <strong>DRINKLY</strong>
+            <div class="footer-brand">
+                <strong>DRINKLY</strong>
 
-            <p>
-                Drink discovery made simple.
-            </p>
+                <p>
+                    Discover drinks. Build your collection.
+                </p>
+            </div>
 
-            <small>
-                SDP Assignment 02 · TheCocktailDB
-            </small>
+            <div class="footer-info">
+                <small>
+                    SDP Assignment 02 · TheCocktailDB
+                </small>
+            </div>
 
             <div class="developer-credit">
-                Designed & Developed by
+                Designed &amp; Developed by
                 <strong>Hussain Ahmed</strong>
             </div>
 
@@ -438,25 +340,25 @@
     </footer>
 
 
+    <!-- DETAILS MODAL -->
     <div id="detailsModal" class="modal">
+
+        <div class="modal-overlay" onclick="closeModal()"></div>
 
         <div class="modal-box">
 
-            <button id="closeModal" class="close-modal">
-                ×
+            <button class="modal-close" onclick="closeModal()">
+                &times;
             </button>
 
-            <div id="modalBody"></div>
+            <div id="modalContent"></div>
 
         </div>
 
     </div>
 
 
-    <div id="toast" class="toast"></div>
-
-
-    <script src="script.js?v=999"></script>
+    <script src="script.js?v=1000"></script>
 
 </body>
 
