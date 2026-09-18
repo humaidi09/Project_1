@@ -6,20 +6,22 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DrinkMart | Premium Drinks</title>
+    <meta name="description" content="DrinkMart - Discover cocktails, classic drinks, shakes and refreshing beverages.">
 
-    <meta name="description" content="Discover premium cocktails, shakes, classic drinks and refreshing beverages.">
+    <title>DrinkMart | Premium Drinks</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260918">
 </head>
 
 <body>
 
-    <!-- ================= HEADER ================= -->
+    <!-- =====================================================
+     HEADER
+===================================================== -->
 
     <header class="top-header">
 
@@ -28,6 +30,7 @@
             <a href="#" class="brand">
                 DRINKMART
             </a>
+
 
             <form class="search-area" id="searchForm">
 
@@ -38,6 +41,7 @@
                 </button>
 
             </form>
+
 
             <div class="header-actions">
 
@@ -60,7 +64,9 @@
     </header>
 
 
-    <!-- ================= CATEGORY NAV ================= -->
+    <!-- =====================================================
+     CATEGORY NAVIGATION
+===================================================== -->
 
     <nav class="category-nav">
 
@@ -99,7 +105,9 @@
     </nav>
 
 
-    <!-- ================= HERO ================= -->
+    <!-- =====================================================
+     HERO
+===================================================== -->
 
     <section class="hero">
 
@@ -107,20 +115,25 @@
 
             <div class="hero-content">
 
-                <div class="hero-label">
+                <span class="hero-label">
                     PREMIUM DRINK COLLECTION
-                </div>
+                </span>
+
 
                 <h1>
                     Something Refreshing
-                    <span>For Every Mood.</span>
+                    <span>
+                        For Every Mood.
+                    </span>
                 </h1>
 
+
                 <p>
-                    Explore cocktails, classic favorites, refreshing
-                    non-alcoholic drinks and unique flavors from our
-                    growing drink collection.
+                    Explore cocktails, classic favorites,
+                    refreshing non-alcoholic drinks and
+                    unique flavors from our growing collection.
                 </p>
+
 
                 <div class="hero-buttons">
 
@@ -137,11 +150,16 @@
             </div>
 
 
+            <!-- Animated drink showcase -->
+
             <div class="hero-drinks">
 
                 <div class="hero-circle circle-one"></div>
+
                 <div class="hero-circle circle-two"></div>
+
                 <div class="hero-circle circle-three"></div>
+
 
                 <div class="floating-drink drink-one">
 
@@ -149,11 +167,13 @@
 
                 </div>
 
+
                 <div class="floating-drink drink-two">
 
                     <img id="heroDrink2" src="" alt="Featured drink">
 
                 </div>
+
 
                 <div class="floating-drink drink-three">
 
@@ -168,108 +188,53 @@
     </section>
 
 
-    <!-- ================= MAIN ================= -->
+    <!-- =====================================================
+     TRENDING DRINKS
+===================================================== -->
+
+    <section class="trending-section">
+
+        <div class="trending-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    TRENDING NOW
+                </span>
+
+                <h2>
+                    Popular Drinks
+                </h2>
+
+            </div>
+
+            <span class="trending-note">
+                Fresh picks from our collection
+            </span>
+
+        </div>
+
+
+        <div class="drink-marquee">
+
+            <div class="marquee-track" id="trendingDrinks">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+     MAIN
+===================================================== -->
 
     <main class="main-container">
 
-        <!-- Browse categories -->
 
-        <section class="browse-section">
-
-            <div class="section-heading">
-
-                <div>
-                    <span class="eyebrow">
-                        SHOP BY CATEGORY
-                    </span>
-
-                    <h2>
-                        Find Your Favorite
-                    </h2>
-                </div>
-
-                <p>
-                    Explore our growing collection.
-                </p>
-
-            </div>
-
-
-            <div class="browse-grid">
-
-                <button class="browse-card browse-orange" data-category="Cocktail" type="button">
-
-                    <span class="browse-number">
-                        01
-                    </span>
-
-                    <strong>
-                        Cocktails
-                    </strong>
-
-                    <small>
-                        Classic & modern
-                    </small>
-
-                </button>
-
-
-                <button class="browse-card browse-dark" data-category="Ordinary Drink" type="button">
-
-                    <span class="browse-number">
-                        02
-                    </span>
-
-                    <strong>
-                        Classics
-                    </strong>
-
-                    <small>
-                        Timeless favorites
-                    </small>
-
-                </button>
-
-
-                <button class="browse-card browse-green" data-category="Non_Alcoholic" type="button">
-
-                    <span class="browse-number">
-                        03
-                    </span>
-
-                    <strong>
-                        Zero Alcohol
-                    </strong>
-
-                    <small>
-                        Fresh & refreshing
-                    </small>
-
-                </button>
-
-
-                <button class="browse-card browse-light" data-category="Shake" type="button">
-
-                    <span class="browse-number">
-                        04
-                    </span>
-
-                    <strong>
-                        Shakes
-                    </strong>
-
-                    <small>
-                        Smooth & creamy
-                    </small>
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= PRODUCTS ================= -->
+        <!-- =================================================
+         PRODUCTS
+    ================================================== -->
 
         <section class="drinks-section" id="drinks">
 
@@ -301,6 +266,9 @@
 
             <div class="shop-layout">
 
+
+                <!-- PRODUCTS -->
+
                 <div class="products-area">
 
                     <div class="product-grid" id="drinksContainer">
@@ -310,6 +278,7 @@
                     <div class="load-more-wrap">
 
                         <button type="button" id="loadMoreBtn" class="load-more-btn">
+
                             <span>
                                 Load More Drinks
                             </span>
@@ -317,7 +286,9 @@
                             <span class="load-more-arrow">
                                 →
                             </span>
+
                         </button>
+
 
                         <p id="catalogStatus">
                             More drinks available
@@ -328,11 +299,14 @@
                 </div>
 
 
-                <!-- ================= GROUP ================= -->
+                <!-- =================================================
+                 GROUP SIDEBAR
+            ================================================== -->
 
                 <aside class="group-sidebar" id="group">
 
                     <div class="group-card">
+
 
                         <div class="group-top">
 
@@ -348,6 +322,7 @@
 
                             </div>
 
+
                             <div class="group-count" id="drinkCount">
                                 0
                             </div>
@@ -362,8 +337,13 @@
                             </span>
 
                             <strong>
-                                <span id="currentCount">0</span>
+
+                                <span id="currentCount">
+                                    0
+                                </span>
+
                                 / 7
+
                             </strong>
 
                         </div>
@@ -381,6 +361,7 @@
 
 
                         <div class="group-summary">
+
 
                             <div class="summary-row">
 
@@ -439,7 +420,9 @@
         </section>
 
 
-        <!-- ================= COLLECTIONS ================= -->
+        <!-- =================================================
+         COLLECTIONS
+    ================================================== -->
 
         <section class="collections-section">
 
@@ -469,8 +452,15 @@
                 <div class="collection-title">
 
                     <div>
-                        <span>01</span>
-                        <h3>Cocktail Collection</h3>
+
+                        <span>
+                            01
+                        </span>
+
+                        <h3>
+                            Cocktail Collection
+                        </h3>
+
                     </div>
 
                 </div>
@@ -485,8 +475,15 @@
                 <div class="collection-title">
 
                     <div>
-                        <span>02</span>
-                        <h3>Classic Drinks</h3>
+
+                        <span>
+                            02
+                        </span>
+
+                        <h3>
+                            Classic Drinks
+                        </h3>
+
                     </div>
 
                 </div>
@@ -501,8 +498,15 @@
                 <div class="collection-title">
 
                     <div>
-                        <span>03</span>
-                        <h3>Party Collection</h3>
+
+                        <span>
+                            03
+                        </span>
+
+                        <h3>
+                            Party Collection
+                        </h3>
+
                     </div>
 
                 </div>
@@ -517,8 +521,15 @@
                 <div class="collection-title">
 
                     <div>
-                        <span>04</span>
-                        <h3>Zero Alcohol</h3>
+
+                        <span>
+                            04
+                        </span>
+
+                        <h3>
+                            Zero Alcohol
+                        </h3>
+
                     </div>
 
                 </div>
@@ -532,7 +543,9 @@
     </main>
 
 
-    <!-- ================= DETAILS MODAL ================= -->
+    <!-- =====================================================
+     DETAILS MODAL
+===================================================== -->
 
     <div class="modal-overlay" id="detailsModal" aria-hidden="true">
 
@@ -543,25 +556,31 @@
             </button>
 
 
-            <div id="modalBody">
-            </div>
+            <div id="modalBody"></div>
 
         </div>
 
     </div>
 
 
-    <!-- ================= TOAST ================= -->
+    <!-- =====================================================
+     TOAST
+===================================================== -->
 
     <div class="toast" id="toast">
+
         <span class="toast-line"></span>
+
         <span id="toastText">
             Added to group.
         </span>
+
     </div>
 
 
-    <!-- ================= FOOTER ================= -->
+    <!-- =====================================================
+     FOOTER
+===================================================== -->
 
     <footer class="footer">
 
@@ -583,6 +602,7 @@
             <div class="developer-credit">
 
                 Designed & Developed by
+
                 <strong>
                     Hussain Ahmed
                 </strong>
